@@ -1,0 +1,624 @@
+
+\documentclass[8pt]{beamer}
+\usepackage{graphicx}                       % loads images
+\usepackage{color}                          % for color in text
+\usepackage{float}                          % to place [H]
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{bigstrut}
+\usepackage{array}
+
+    
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\usepackage{multirow}
+\usepackage{xr}
+%\usepackage[round]{natbib}
+
+
+
+% \usepackage[backend=biber, style=alphabetic ,
+% citestyle=authoryear]{biblatex}
+%   % biber is version 2.4; the latest?
+
+
+% \addbibresource{../paper/References.bib}
+
+
+
+
+\graphicspath{{../pilot_3/Figuras/}}
+\usepackage{color}
+%\usepackage{morefloats}
+%\usepackage{showkeys}
+
+\usepackage{enumerate}
+\usepackage[labelfont=bf]{caption}
+\usepackage[labelfont=bf, justification=justified]{subcaption}
+\captionsetup{position=top}
+\captionsetup[subfigure]{justification=centering}
+
+
+
+\usepackage{epstopdf}
+\epstopdfDeclareGraphicsRule{.tiff}{png}{.png}{convert #1 \OutputFile}
+\AppendGraphicsExtensions{.tiff}
+
+
+\usepackage{setspace}
+
+\renewcommand{\rmdefault}{ppl}
+\definecolor{darkred}{rgb}{0.8, 0.0, 0.0}
+\definecolor{navyblue}{rgb}{0.0, 0.0, 0.8}
+\definecolor{cadmiumgreen}{rgb}{0.0, 0.6, 0.24}
+
+\usepackage{hyperref}
+\hypersetup{
+    pdfstartview={FitH},    		% fits the width of the page to the window
+    pdftitle={Pilot 3},    % title
+    pdfauthor={IML},     % author
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=black,          % color of internal links (change box color with linkbordercolor)
+    citecolor=darkred,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=darkred           % color of external links
+}
+
+\newcommand{\green}[1]{\textcolor{cadmiumgreen}{#1}}
+
+\newcommand{\comment}[1]
+{\par {\bfseries \color{blue} #1 \par}}
+%\usepackage{showkeys}
+\setbeamertemplate{theorems}[numbered]
+\newtheorem{claim}[theorem]{Claim}
+
+
+% There are many different themes available for Beamer. A comprehensive
+% list with examples is given here:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+% You can uncomment the themes below if you would like to use a different
+% one:
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+\setbeamertemplate{headline}{%
+    \leavevmode%
+    \hbox{%
+        \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1.125ex]{palette quaternary}%
+            \insertsectionnavigationhorizontal{\paperwidth}{}{\hskip0pt plus1filll}
+        \end{beamercolorbox}%
+    }
+}
+\setbeamercovered{invisible}
+\title{Something about lawyer quality, agency, and labor court outcomes }
+
+% A subtitle is optional and this may be deleted
+\subtitle{Subtitle}
+
+\author{J. Sadka\inst{1} \and E. Seira\inst{2} \and C. Woodruff\inst{3}}
+% - Give the names in the same order as the appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\institute[ITAM, Oxford] % (optional, but mostly needed)
+{
+  \inst{1,2}%
+  ITAM
+  \and
+  \inst{3}%
+  Oxford
+}
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+
+\date{Fall 2018}
+% - Either use conference name or its abbreviation.
+% - Not really informative to the audience, more for people (including
+%   yourself) who are reading the slides online
+
+\subject{Applied Microeconomics}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+
+% Let's get started
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\section*{Outline}
+\begin{frame}{Outline}
+\tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Previous results}
+\begin{frame}{Previous results}
+
+\begin{table}[H]
+    \caption{Treatment Effects}
+    \label{Treatment_effects}
+    \begin{center}
+    \scriptsize{\input{../pilot_3/Tables/treatment_effects.tex}}
+    \end{center}
+\end{table}
+
+
+\end{frame}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary statistics}
+
+\begin{frame}{Summary statistics}
+    \begin{table}[H]
+\caption{SS}
+\begin{center}
+\tiny{\input{../pilot_3/Tables/SS.tex}}
+\end{center}
+ \footnotesize
+\textit{Notes:} Summary statistics of main variables. Standard errors are shown in parenthesis.   
+\textit{Do file: } \texttt{SS.do}
+\end{table}
+\end{frame}
+
+\begin{frame}{Summary statistics : A/B}
+    \begin{table}[H]
+\caption{SS :  A/B}
+\begin{center}
+\tiny{\input{../pilot_3/Tables/SS_AB.tex}}
+\end{center}
+ \footnotesize
+\textit{Notes:} Summary statistics of main variables. Standard errors are shown in parenthesis.   
+\textit{Do file: } \texttt{SS.do}
+\end{table}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Expectations}
+
+\begin{frame}{Expectations}
+    
+
+\begin{figure}[H]
+    \caption{Histograms of expectations}
+    \label{hist_exp}
+    \begin{center}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Amount}
+            \centering
+            \includegraphics[width=\textwidth]{hist_exp_amt.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Probability}
+                \centering
+                \includegraphics[width=\textwidth]{hist_exp_prob.pdf}
+        \end{subfigure}
+        \end{center}
+        \end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Updating}
+
+\begin{frame}{Updating}
+    \begin{figure}[H]
+    \caption{Immediate updating}
+    \label{update_expimm}
+    \begin{center}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Amount}
+            \centering
+            \includegraphics[width=\textwidth]{imm_exp_amt.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Probability}
+                \centering
+                \includegraphics[width=\textwidth]{imm_exp_prob.pdf}
+        \end{subfigure}
+    \end{center} 
+         \scriptsize \textit{Notes:} Amount variables are trimmed at the 95th percentile.
+\end{figure}
+\end{frame}
+
+\begin{frame}{Updating}
+        \begin{figure}[H]
+    \caption{Updating at 2 weeks}
+    \label{update_exp2w}
+    \begin{center}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Amount}
+            \centering
+            \includegraphics[width=\textwidth]{2w_exp_amt.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Probability}
+            \centering
+            \includegraphics[width=\textwidth]{2w_exp_prob.pdf}
+        \end{subfigure}
+      \end{center} 
+         \scriptsize \textit{Notes:} Amount variables are trimmed at the 95th percentile.
+\end{figure}      
+        
+\end{frame}
+
+
+\begin{frame}{Updating}
+    \begin{figure}[H]
+    \caption{Updating at 2 months}
+    \label{update_exp2m}
+    \begin{center}
+            \begin{subfigure}{0.45\textwidth}
+            \caption{Amount}
+            \centering
+            \includegraphics[width=\textwidth]{2m_exp_amt.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Probability}
+            \centering
+            \includegraphics[width=\textwidth]{2m_exp_prob.pdf}
+        \end{subfigure}
+    \end{center} 
+         \scriptsize \textit{Notes:} Amount variables are trimmed at the 95th percentile.
+\end{figure}
+
+\end{frame}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Treatment effects}
+
+\subsection{Main results}
+\begin{frame}{Main results}
+
+ \begin{table}[H] 
+ \begin{subtable}{1.\textwidth}
+ \begin{center}
+ \tiny{\input{../pilot_3/Tables/reg_main_treat_pres.tex}}
+ \end{center}
+ \end{subtable}
+ \end{table}  
+ 
+\end{frame}
+
+\begin{frame}{Lee bounds}
+
+\begin{figure}[H]
+    \caption{Lee Bounds}
+    \label{lee_bounds}
+    \begin{center}
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{lee_bounds_2w.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.49\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{lee_bounds_2m.pdf}
+        \end{subfigure}
+    \end{center} 
+\end{figure} 
+ 
+\end{frame}
+
+\subsection{Results of expectations}
+\begin{frame}{Expectations for different arms}
+
+\begin{figure}[H]
+    \begin{center}
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{lee_bounds_exp_amt.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.49\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{lee_bounds_exp_prob.pdf}
+        \end{subfigure}
+    \end{center} 
+\end{figure} 
+\end{frame}
+
+\begin{frame}{Update of expectations}
+
+\begin{figure}[H]
+    \begin{center}
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{lee_bounds_diff_amt.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.49\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{lee_bounds_diff_prob.pdf}
+        \end{subfigure}
+    \end{center} 
+\end{figure} 
+ 
+ 
+\end{frame}
+
+
+\subsection{Updating as driver of the TE}
+\begin{frame}{Updating as driver of the TE}
+Now, to explore the impact of the update in expectations in the settlement rate, we perform a 2SLS instrumenting the immediate decrease in expectations with treatment.
+
+\[\text{settlement}=\alpha_{IV}+\beta_{IV}\widetilde{\text{Decrease expectation}}+\gamma_{IV}X\]
+
+\[\text{Decrease expectation}=\alpha_{FS}+\beta_{FS}\text{Treatment}+\gamma_{FS}X\]
+
+where decrease expectations is either
+\begin{enumerate}
+    \item Dummy: $1(\text{immediate expectation}<\text{baseline})$
+    \item Continuous: $\text{immediate expectation}-\text{baseline}$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Updating as driver of the TE}
+
+\begin{table}[H]
+\caption{Immediate updating in 2M settlement}
+\begin{center}
+\tiny{\input{../pilot_3/Tables/iv_inm_update_2m.tex}}
+\end{center}
+\end{table}     
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Lawyers}
+
+\begin{frame}{Lawyers on expectations}
+    Now we focus on expectations and the role of private/public lawyers in expectations. 
+\[\text{Survey expectation}= \alpha+\beta_11(\text{Public Lawyer}) + \beta_2 \text{Baseline} + \gamma X\]
+\begin{table}[H]
+      \centering
+        \tiny{\input{../pilot_3/Tables/reg_expectation_2m_pres.tex}}
+\end{table}
+
+\end{frame}
+
+
+\subsection{Welfare - Quality}
+\begin{frame}{Lawyer's quality}
+
+ \begin{table}[H] 
+ \begin{subtable}{1.\textwidth}
+ \begin{center}
+ \tiny{\input{../pilot_3/Tables/lawyerstype_info_reg.tex}}
+ \end{center}
+ \end{subtable}
+ \end{table}  
+ 
+\end{frame}
+
+
+\begin{frame}{Lawyer's quality}
+
+ \begin{table}[H] 
+ \begin{subtable}{1.\textwidth}
+ \begin{center}
+ \tiny{\input{../pilot_3/Tables/welfare_reg_lawyer_2m_pres.tex}}
+ \end{center}
+ \end{subtable}
+ \end{table}  
+ 
+\end{frame}
+
+
+\begin{frame}{Welfare}
+
+ \begin{table}[H] 
+ \begin{subtable}{1.\textwidth}
+ \begin{center}
+ \tiny{\input{../pilot_3/Tables/welfare_reg_2m_pres.tex}}
+ \end{center}
+ \end{subtable}
+ \end{table}  
+ 
+\end{frame}
+
+
+\begin{frame}{Lawyer's Quality}
+    The coefficients for the FE offices in a regression against are shown in increasing order in the plot below.
+    
+    \begin{figure}[H]
+    \begin{center}
+        \begin{subfigure}{0.49\textwidth}
+        \caption{Positive recovery}
+            \centering
+            \includegraphics[width=\textwidth]{betas_pos_rec.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.49\textwidth}
+        \caption{Duration}
+                \centering
+                \includegraphics[width=\textwidth]{betas_duration.pdf}
+        \end{subfigure}
+    \end{center} 
+\end{figure} 
+\end{frame}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Appendix}
+
+\begin{frame}{Appendix - Balance}
+\begin{table}[H] 
+ \begin{subtable}{1.\textwidth}
+ \begin{center}
+ \tiny{\input{../pilot_3/Tables/reg_balance_2m.tex}}
+ \end{center}
+ \end{subtable}
+ \end{table}  
+\end{frame}
+
+\begin{frame}{Appendix - Updating}
+    \begin{figure}[H]
+    \caption{Immediate updating}
+    \label{update_expimm}
+    \begin{center}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Amount}
+            \centering
+            \includegraphics[width=\textwidth]{imm_exp_amt_nocond.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Probability}
+                \centering
+                \includegraphics[width=\textwidth]{imm_exp_prob_nocond.pdf}
+        \end{subfigure}
+    \end{center} 
+         \scriptsize \textit{Notes:} Amount variables are trimmed at the 95th percentile.
+\end{figure}
+\end{frame}
+
+\begin{frame}{Appendix - Updating}
+        \begin{figure}[H]
+    \caption{Updating at 2 weeks}
+    \label{update_exp2w}
+    \begin{center}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Amount}
+            \centering
+            \includegraphics[width=\textwidth]{2w_exp_amt_nocond.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Probability}
+            \centering
+            \includegraphics[width=\textwidth]{2w_exp_prob_nocond.pdf}
+        \end{subfigure}
+      \end{center} 
+         \scriptsize \textit{Notes:} Amount variables are trimmed at the 95th percentile.
+\end{figure}      
+        
+\end{frame}
+
+
+\begin{frame}{Appendix - Updating}
+    \begin{figure}[H]
+    \caption{Updating at 2 months}
+    \label{update_exp2m}
+    \begin{center}
+            \begin{subfigure}{0.45\textwidth}
+            \caption{Amount}
+            \centering
+            \includegraphics[width=\textwidth]{2m_exp_amt_nocond.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Probability}
+            \centering
+            \includegraphics[width=\textwidth]{2m_exp_prob_nocond.pdf}
+        \end{subfigure}
+    \end{center} 
+         \scriptsize \textit{Notes:} Amount variables are trimmed at the 95th percentile.
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Appendix - Lee bounds ratio}
+\begin{figure}[H]
+    \begin{center}
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{lee_bounds_ratio_amt.pdf}
+        \end{subfigure}
+        \begin{subfigure}{0.49\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{lee_bounds_ratio_prob.pdf}
+        \end{subfigure}
+    \end{center} 
+\end{figure} 
+ 
+ 
+\end{frame}
+
+
+\begin{frame}{Appendix - Expectation at 2w}
+\begin{table}[H]
+      \centering
+        \tiny{\input{../pilot_3/Tables/reg_expectation_2w_pres.tex}}
+\end{table}
+\end{frame}
+
+\begin{frame}{Appendix - Expectation by lawyer}
+\begin{figure}[H]
+    \caption{Linear polynomial smoothing of expectations by type of lawyer}
+    \label{lps_type_law}
+    \begin{center}
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Amount}
+            \centering
+            \includegraphics[width=\textwidth]{lpoly_exp_amt_lawyer.pdf}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.45\textwidth}
+            \caption{Probability}
+                \centering
+                \includegraphics[width=\textwidth]{lpoly_exp_prob_lawyer.pdf}
+        \end{subfigure}
+    \end{center} 
+\end{figure}
+\end{frame}
+
+\begin{frame}{Appendix - Update \& settlement}
+    
+\begin{table}[H]
+\caption{Immediate updating in 2W settlement}
+\begin{center}
+\tiny{\input{../pilot_3/Tables/iv_inm_update_2w.tex}}
+\end{center}
+\end{table} 
+
+\end{frame}
+\end{document}
