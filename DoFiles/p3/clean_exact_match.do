@@ -8,36 +8,36 @@ keep nombre_actor nombre_demandado* id_actor
 *									ACTOR   								   *
 ********************************************************************************
 *Remove blank spaces
-replace nombre_actor=stritrim(trim(itrim(upper(nombre_actor))))
+replace nombre_actor = stritrim(trim(itrim(upper(nombre_actor))))
 
 *Basic name cleaning 
 replace nombre_actor = subinstr(nombre_actor, ".", "", .)
 replace nombre_actor = subinstr(nombre_actor, " & ", " ", .)
 replace nombre_actor = subinstr(nombre_actor, "&", "", .)
 replace nombre_actor = subinstr(nombre_actor, ",", "", .)
-replace nombre_actor = subinstr(nombre_actor, "Ò", "N", .)
-replace nombre_actor = subinstr(nombre_actor, "—", "N", .)
+replace nombre_actor = subinstr(nombre_actor, "√±", "N", .)
+replace nombre_actor = subinstr(nombre_actor, "√ë", "N", .)
 replace nombre_actor = subinstr(nombre_actor, "-", " ", .)
-replace nombre_actor = subinstr(nombre_actor, "·", "A", .)
-replace nombre_actor = subinstr(nombre_actor, "È", "E", .)
-replace nombre_actor = subinstr(nombre_actor, "Ì", "I", .)
-replace nombre_actor = subinstr(nombre_actor, "Û", "O", .)
-replace nombre_actor = subinstr(nombre_actor, "˙", "U", .)
-replace nombre_actor = subinstr(nombre_actor, "¡", "A", .)
-replace nombre_actor = subinstr(nombre_actor, "…", "E", .)
-replace nombre_actor = subinstr(nombre_actor, "Õ", "I", .)
-replace nombre_actor = subinstr(nombre_actor, "”", "O", .)
-replace nombre_actor = subinstr(nombre_actor, "⁄", "U", .)
-replace nombre_actor = subinstr(nombre_actor, "‚", "A", .)
-replace nombre_actor = subinstr(nombre_actor, "Í", "E", .)
-replace nombre_actor = subinstr(nombre_actor, "Ó", "I", .)
-replace nombre_actor = subinstr(nombre_actor, "Ù", "O", .)
-replace nombre_actor = subinstr(nombre_actor, "˘", "U", .)
-replace nombre_actor = subinstr(nombre_actor, "¬", "A", .)
-replace nombre_actor = subinstr(nombre_actor, " ", "E", .)
-replace nombre_actor = subinstr(nombre_actor, "Œ", "I", .)
-replace nombre_actor = subinstr(nombre_actor, "‘", "O", .)
-replace nombre_actor = subinstr(nombre_actor, "€", "U", .)
+replace nombre_actor = subinstr(nombre_actor, "√°", "A", .)
+replace nombre_actor = subinstr(nombre_actor, "√©", "E", .)
+replace nombre_actor = subinstr(nombre_actor, "√≠", "I", .)
+replace nombre_actor = subinstr(nombre_actor, "√≥", "O", .)
+replace nombre_actor = subinstr(nombre_actor, "√∫", "U", .)
+replace nombre_actor = subinstr(nombre_actor, "√Å", "A", .)
+replace nombre_actor = subinstr(nombre_actor, "√â", "E", .)
+replace nombre_actor = subinstr(nombre_actor, "√ç", "I", .)
+replace nombre_actor = subinstr(nombre_actor, "√ì", "O", .)
+replace nombre_actor = subinstr(nombre_actor, "√ö", "U", .)
+replace nombre_actor = subinstr(nombre_actor, "√¢", "A", .)
+replace nombre_actor = subinstr(nombre_actor, "√™", "E", .)
+replace nombre_actor = subinstr(nombre_actor, "√Æ", "I", .)
+replace nombre_actor = subinstr(nombre_actor, "√¥", "O", .)
+replace nombre_actor = subinstr(nombre_actor, "√π", "U", .)
+replace nombre_actor = subinstr(nombre_actor, "√Ç", "A", .)
+replace nombre_actor = subinstr(nombre_actor, "√ä", "E", .)
+replace nombre_actor = subinstr(nombre_actor, "√é", "I", .)
+replace nombre_actor = subinstr(nombre_actor, "√î", "O", .)
+replace nombre_actor = subinstr(nombre_actor, "√õ", "U", .)
 replace nombre_actor = subinstr(nombre_actor, " DE ", " ", .)
 replace nombre_actor = subinstr(nombre_actor, " DEL ", " ", .)
 replace nombre_actor = subinstr(nombre_actor, " LA ", " ", .)
@@ -45,7 +45,7 @@ replace nombre_actor = subinstr(nombre_actor, " LAS ", " ", .)
 replace nombre_actor = subinstr(nombre_actor, " LO ", " ", .)
 replace nombre_actor = subinstr(nombre_actor, " LOS ", " ", .)
 
-replace nombre_actor=stritrim(trim(itrim(upper(nombre_actor))))
+replace nombre_actor = stritrim(trim(itrim(upper(nombre_actor))))
 
 
 *Remove special characters
@@ -58,35 +58,35 @@ forval i = 1/`r(max)' {
      local OK inrange(`char', "a", "z") | inrange(`char', "A", "Z")  | `char'==" "
      qui replace newname = newname + `char' if `OK' 
 }
-replace nombre_actor=newname
+replace nombre_actor = newname
 drop newname length
 
 *Generate "new name" in alphabetical order
 	*Split string
 split nombre_actor, p(" ") gen(aux_names)
 
-local k=0
+local k = 0
 foreach var of varlist aux_names* {
-	local k=`k'+1
+	local k = `k'+1
 	}
 	*Sort in rows
 rowsort aux_names1-aux_names`k', generate(order_names1-order_names`k')
 
 	*Gen "new name"
-gen plaintiff_name=""
-forvalues i=1/`k' {
-	replace plaintiff_name=plaintiff_name + " " + order_names`i'
+gen plaintiff_name = ""
+forvalues i = 1/`k' {
+	replace plaintiff_name = plaintiff_name + " " + order_names`i'
 	}
-replace plaintiff_name=stritrim(trim(itrim(upper(plaintiff_name))))
+replace plaintiff_name = stritrim(trim(itrim(upper(plaintiff_name))))
 
 ********************************************************************************
 *									DEMANDADOS								   *
 ********************************************************************************
 
-forvalues k=1/6 {
+forvalues k = 1/6 {
 	cap drop nombre_dem
 	*Remove blank spaces
-	gen nombre_dem=stritrim(trim(itrim(upper(nombre_demandado`k'))))
+	gen nombre_dem = stritrim(trim(itrim(upper(nombre_demandado`k'))))
 		
 	*Basic name cleaning 
 	replace nombre_dem = subinstr(nombre_dem, ".", "", .)
@@ -94,29 +94,29 @@ forvalues k=1/6 {
 	replace nombre_dem = subinstr(nombre_dem, " & ", " ", .)
 	replace nombre_dem = subinstr(nombre_dem, "&", "", .)
 	replace nombre_dem = subinstr(nombre_dem, ",", "", .)
-	replace nombre_dem = subinstr(nombre_dem, "Ò", "N", .)
-	replace nombre_dem = subinstr(nombre_dem, "—", "N", .)
+	replace nombre_dem = subinstr(nombre_dem, "√±", "N", .)
+	replace nombre_dem = subinstr(nombre_dem, "√ë", "N", .)
 	replace nombre_dem = subinstr(nombre_dem, "-", " ", .)
-	replace nombre_dem = subinstr(nombre_dem, "·", "A", .)
-	replace nombre_dem = subinstr(nombre_dem, "È", "E", .)
-	replace nombre_dem = subinstr(nombre_dem, "Ì", "I", .)
-	replace nombre_dem = subinstr(nombre_dem, "Û", "O", .)
-	replace nombre_dem = subinstr(nombre_dem, "˙", "U", .)
-	replace nombre_dem = subinstr(nombre_dem, "¡", "A", .)
-	replace nombre_dem = subinstr(nombre_dem, "…", "E", .)
-	replace nombre_dem = subinstr(nombre_dem, "Õ", "I", .)
-	replace nombre_dem = subinstr(nombre_dem, "”", "O", .)
-	replace nombre_dem = subinstr(nombre_dem, "⁄", "U", .)
-	replace nombre_dem = subinstr(nombre_dem, "‚", "A", .)
-	replace nombre_dem = subinstr(nombre_dem, "Í", "E", .)
-	replace nombre_dem = subinstr(nombre_dem, "Ó", "I", .)
-	replace nombre_dem = subinstr(nombre_dem, "Ù", "O", .)
-	replace nombre_dem = subinstr(nombre_dem, "˘", "U", .)
-	replace nombre_dem = subinstr(nombre_dem, "¬", "A", .)
-	replace nombre_dem = subinstr(nombre_dem, " ", "E", .)
-	replace nombre_dem = subinstr(nombre_dem, "Œ", "I", .)
-	replace nombre_dem = subinstr(nombre_dem, "‘", "O", .)
-	replace nombre_dem = subinstr(nombre_dem, "€", "U", .)
+	replace nombre_dem = subinstr(nombre_dem, "√°", "A", .)
+	replace nombre_dem = subinstr(nombre_dem, "√©", "E", .)
+	replace nombre_dem = subinstr(nombre_dem, "√≠", "I", .)
+	replace nombre_dem = subinstr(nombre_dem, "√≥", "O", .)
+	replace nombre_dem = subinstr(nombre_dem, "√∫", "U", .)
+	replace nombre_dem = subinstr(nombre_dem, "√Å", "A", .)
+	replace nombre_dem = subinstr(nombre_dem, "√â", "E", .)
+	replace nombre_dem = subinstr(nombre_dem, "√ç", "I", .)
+	replace nombre_dem = subinstr(nombre_dem, "√ì", "O", .)
+	replace nombre_dem = subinstr(nombre_dem, "√ö", "U", .)
+	replace nombre_dem = subinstr(nombre_dem, "√¢", "A", .)
+	replace nombre_dem = subinstr(nombre_dem, "√™", "E", .)
+	replace nombre_dem = subinstr(nombre_dem, "√Æ", "I", .)
+	replace nombre_dem = subinstr(nombre_dem, "√¥", "O", .)
+	replace nombre_dem = subinstr(nombre_dem, "√π", "U", .)
+	replace nombre_dem = subinstr(nombre_dem, "√Ç", "A", .)
+	replace nombre_dem = subinstr(nombre_dem, "√ä", "E", .)
+	replace nombre_dem = subinstr(nombre_dem, "√é", "I", .)
+	replace nombre_dem = subinstr(nombre_dem, "√î", "O", .)
+	replace nombre_dem = subinstr(nombre_dem, "√õ", "U", .)
 	replace nombre_dem = subinstr(nombre_dem, " SA ", " ", .)
 	replace nombre_dem = subinstr(nombre_dem, " CV ", " ", .)
 	replace nombre_dem = subinstr(nombre_dem, " SAB ", " ", .)
@@ -156,7 +156,7 @@ forvalues k=1/6 {
 	replace nombre_dem = subinstr(nombre_dem, " LAS ", " ", .)
 	replace nombre_dem = subinstr(nombre_dem, " LO ", " ", .)
 	replace nombre_dem = subinstr(nombre_dem, " LOS ", " ", .)
-	replace nombre_dem = subinstr(nombre_dem, "¥", "", .)
+	replace nombre_dem = subinstr(nombre_dem, "¬¥", "", .)
 	replace nombre_dem = subinstr(nombre_dem, "'", "", .)
 
 	*Identify main occurrences
@@ -183,7 +183,7 @@ forvalues k=1/6 {
 	replace nombre_dem=newname
 	drop newname length
 		
-	gen defendant_name_`k'=stritrim(trim(itrim(upper(nombre_dem))))
+	gen defendant_name_`k' = stritrim(trim(itrim(upper(nombre_dem))))
 
 	}
 
@@ -195,7 +195,7 @@ save "$directorio\_aux\td.dta", replace
 use "$directorio\DB\treatment_data.dta", clear
 cap drop plaintiff_name 
 cap drop plaintiff_name_hom
-forvalues k=1/6 {
+forvalues k = 1/6 {
 	cap drop defendant_name_`k'
 	}
 merge 1:1 id_actor using "$directorio\_aux\td.dta", nogen
@@ -211,39 +211,39 @@ save "$directorio\DB\treatment_data.dta", replace
 
 use "$directorio\_aux\expedientes_long.dta", clear
 keep nombre_actor FOLIO EXPEDIENTE JUNTA demanda
-gen name=nombre_actor
+gen name = nombre_actor
 
 *Remove blank spaces
-replace nombre_actor=stritrim(trim(itrim(upper(nombre_actor))))
+replace nombre_actor = stritrim(trim(itrim(upper(nombre_actor))))
 
 *Basic name cleaning 
 replace nombre_actor = subinstr(nombre_actor, ".", "", .)
 replace nombre_actor = subinstr(nombre_actor, " & ", " ", .)
 replace nombre_actor = subinstr(nombre_actor, "&", "", .)
 replace nombre_actor = subinstr(nombre_actor, ",", "", .)
-replace nombre_actor = subinstr(nombre_actor, "Ò", "N", .)
-replace nombre_actor = subinstr(nombre_actor, "—", "N", .)
+replace nombre_actor = subinstr(nombre_actor, "√±", "N", .)
+replace nombre_actor = subinstr(nombre_actor, "√ë", "N", .)
 replace nombre_actor = subinstr(nombre_actor, "-", " ", .)
-replace nombre_actor = subinstr(nombre_actor, "·", "A", .)
-replace nombre_actor = subinstr(nombre_actor, "È", "E", .)
-replace nombre_actor = subinstr(nombre_actor, "Ì", "I", .)
-replace nombre_actor = subinstr(nombre_actor, "Û", "O", .)
-replace nombre_actor = subinstr(nombre_actor, "˙", "U", .)
-replace nombre_actor = subinstr(nombre_actor, "¡", "A", .)
-replace nombre_actor = subinstr(nombre_actor, "…", "E", .)
-replace nombre_actor = subinstr(nombre_actor, "Õ", "I", .)
-replace nombre_actor = subinstr(nombre_actor, "”", "O", .)
-replace nombre_actor = subinstr(nombre_actor, "⁄", "U", .)
-replace nombre_actor = subinstr(nombre_actor, "‚", "A", .)
-replace nombre_actor = subinstr(nombre_actor, "Í", "E", .)
-replace nombre_actor = subinstr(nombre_actor, "Ó", "I", .)
-replace nombre_actor = subinstr(nombre_actor, "Ù", "O", .)
-replace nombre_actor = subinstr(nombre_actor, "˘", "U", .)
-replace nombre_actor = subinstr(nombre_actor, "¬", "A", .)
-replace nombre_actor = subinstr(nombre_actor, " ", "E", .)
-replace nombre_actor = subinstr(nombre_actor, "Œ", "I", .)
-replace nombre_actor = subinstr(nombre_actor, "‘", "O", .)
-replace nombre_actor = subinstr(nombre_actor, "€", "U", .)
+replace nombre_actor = subinstr(nombre_actor, "√°", "A", .)
+replace nombre_actor = subinstr(nombre_actor, "√©", "E", .)
+replace nombre_actor = subinstr(nombre_actor, "√≠", "I", .)
+replace nombre_actor = subinstr(nombre_actor, "√≥", "O", .)
+replace nombre_actor = subinstr(nombre_actor, "√∫", "U", .)
+replace nombre_actor = subinstr(nombre_actor, "√Å", "A", .)
+replace nombre_actor = subinstr(nombre_actor, "√â", "E", .)
+replace nombre_actor = subinstr(nombre_actor, "√ç", "I", .)
+replace nombre_actor = subinstr(nombre_actor, "√ì", "O", .)
+replace nombre_actor = subinstr(nombre_actor, "√ö", "U", .)
+replace nombre_actor = subinstr(nombre_actor, "√¢", "A", .)
+replace nombre_actor = subinstr(nombre_actor, "√™", "E", .)
+replace nombre_actor = subinstr(nombre_actor, "√Æ", "I", .)
+replace nombre_actor = subinstr(nombre_actor, "√¥", "O", .)
+replace nombre_actor = subinstr(nombre_actor, "√π", "U", .)
+replace nombre_actor = subinstr(nombre_actor, "√Ç", "A", .)
+replace nombre_actor = subinstr(nombre_actor, "√ä", "E", .)
+replace nombre_actor = subinstr(nombre_actor, "√é", "I", .)
+replace nombre_actor = subinstr(nombre_actor, "√î", "O", .)
+replace nombre_actor = subinstr(nombre_actor, "√õ", "U", .)
 replace nombre_actor = subinstr(nombre_actor, " DE ", " ", .)
 replace nombre_actor = subinstr(nombre_actor, " DEL ", " ", .)
 replace nombre_actor = subinstr(nombre_actor, " LA ", " ", .)
@@ -251,7 +251,7 @@ replace nombre_actor = subinstr(nombre_actor, " LAS ", " ", .)
 replace nombre_actor = subinstr(nombre_actor, " LO ", " ", .)
 replace nombre_actor = subinstr(nombre_actor, " LOS ", " ", .)
 
-replace nombre_actor=stritrim(trim(itrim(upper(nombre_actor))))
+replace nombre_actor = stritrim(trim(itrim(upper(nombre_actor))))
 
 
 *Remove special characters
@@ -271,21 +271,18 @@ drop newname length
 	*Split string
 split nombre_actor, p(" ") gen(aux_names)
 
-local k=0
+local k = 0
 foreach var of varlist aux_names* {
-	local k=`k'+1
+	local k = `k'+1
 	}
 	*Sort in rows
 rowsort aux_names1-aux_names`k', generate(order_names1-order_names`k')
 
 	*Gen "new name"
-gen plaintiff_name=""
-forvalues i=1/`k' {
-	replace plaintiff_name=plaintiff_name + " " + order_names`i'
+gen plaintiff_name = ""
+forvalues i = 1/`k' {
+	replace plaintiff_name = plaintiff_name + " " + order_names`i'
 	}
-replace plaintiff_name=stritrim(trim(itrim(upper(plaintiff_name))))
+replace plaintiff_name = stritrim(trim(itrim(upper(plaintiff_name))))
 
 save "$directorio\_aux\expedientes_long.dta", replace
-
-
-

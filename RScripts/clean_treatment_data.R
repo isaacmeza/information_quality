@@ -144,18 +144,13 @@ treatment_data = bind_rows(t_1, t_23) %>%
          genero = ifelse(genero == '', NA, genero),
          angry = as.numeric(recode(nivel_enojo, '1' = '1', '2' = '1', '3' = '0', '4' = '0'))) %>%
   select(-one_of(private_vars), -cantidad_mayor) %>%
-  mutate_if(is.logical, as.numeric)
+  mutate_if(is.logical, as.numeric) %>%
+  distinct()
 
 # Quito acentos y cosas feas de los nombres
 setnames(treatment_data, normalize_names(names(treatment_data), remove_punct = F))
 
-    
-
 # Guardamos los datos
-write.csv(treatment_data, '../DB/treatment_data.csv', na = '', row.names = F)
-
-treatment_data %>%
-  mutate(genero = as.numeric(recode(genero, 'Mujer' = '1', 'Hombre' = '0'))) %>%
-  saveRDS('../DB/treatment_data.RDS')
+write.csv(treatment_data, '../_aux/treatment_data.csv', na = '', row.names = F)
 
 rm(tratamientos_1, tratamientos_23, t_1, t_23, diccionario)

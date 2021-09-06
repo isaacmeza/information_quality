@@ -37,6 +37,7 @@ normalize_names = function(nombres, remove_punct = T){
     str_trim(., 'both') %>%
     gsub(' ', '_', .) %>%
     tolower(.) %>%
+    gsub('¿', '', .) %>%     
     gsub('ú', 'u', .) %>%
     gsub('ü', 'u', .) %>%
     gsub('á', 'a', .) %>%

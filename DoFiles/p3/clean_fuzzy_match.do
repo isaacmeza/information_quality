@@ -1,6 +1,6 @@
 use "$directorio\_aux\expedientes_long.dta", clear
 keep if demanda==1
-egen idadmin=group(FOLIO)
+egen idadmin = group(FOLIO)
 duplicates drop plaintiff_name FOLIO, force
 tempfile temp_exp
 save `temp_exp'
@@ -8,7 +8,7 @@ save `temp_exp'
 use "$directorio\DB\treatment_data.dta", clear
 duplicates drop plaintiff_name, force
 sort plaintiff_name
-egen id=group(id_actor)
+egen id = group(id_actor)
 
 *FUZZY MATCH
 matchit id plaintiff_name using `temp_exp' ///
@@ -22,7 +22,7 @@ save "$directorio\_aux\match.dta", replace
 use "$directorio\DB\treatment_data.dta", clear
 duplicates drop plaintiff_name, force
 sort plaintiff_name
-egen id=group(id_actor)
+egen id = group(id_actor)
 merge 1:m id using  "$directorio\_aux\match.dta", nogen
 
 *Keep exact and fuzzy matches above certain thresholds

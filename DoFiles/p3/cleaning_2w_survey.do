@@ -1,4 +1,6 @@
-*Cleaning 2w survey
+/*
+Cleaning Survey Data. The source for this datasets is the follow-up surveys at 2w 
+*/
 
 pause on
 **************************************GFORMS************************************
@@ -73,7 +75,7 @@ rename (`oldnames') (timestamp
 
 
 *Status="Exitosa"
-bysort id_actor: gen num_intentos=_N
+bysort id_actor : gen num_intentos = _N
 keep if status_encuesta=="Exitosa"
 drop status_encuesta
 gen status_encuesta=1
@@ -86,31 +88,31 @@ foreach var of varlist  conflicto_arreglado reinstalacion dice_cantidad ///
 		ha_hablado_con_abogado_privado firmo_carta_poder sigue_buscando_alternativas_pri ///
 		tramito_alguna_cita_de_conc {
 	
-	gen `var'_=(strpos(`var', "S�")!=0) if !missing(`var') & length(`var')<=4
+	gen `var'_ = (strpos(`var', "SÃ")!=0) if !missing(`var') & length(`var')<=4
 	drop `var'
 	rename `var'_ `var'
 	}
 	
 *Mutates	
 
-replace sigue_buscando_alternativas_pri=. if conflicto_arreglado==1
+replace sigue_buscando_alternativas_pri = . if conflicto_arreglado==1
 
-gen se_registro_el_acuerdo_ante_la_j=(strpos(se_registro_el_acuerdo_ante_j, "Junta")!=0) if !missing(se_registro_el_acuerdo_ante_j)
+gen se_registro_el_acuerdo_ante_la_j = (strpos(se_registro_el_acuerdo_ante_j, "Junta")!=0) if !missing(se_registro_el_acuerdo_ante_j)
 drop se_registro_el_acuerdo_ante_j
 
 
-gen como_lo_encontro_=.
-replace como_lo_encontro_=1 if strpos(upper(como_lo_encontro), "ENTRADA")!=0 ///
+gen como_lo_encontro_ = .
+replace como_lo_encontro_ = 1 if strpos(upper(como_lo_encontro), "ENTRADA")!=0 ///
 					& strpos(upper(como_lo_encontro), "JUNTA")!=0 ///
 					& strpos(upper(como_lo_encontro), "RECOMENDARON")!=0
-replace como_lo_encontro_=2 if strpos(upper(como_lo_encontro), "JUNTA")!=0 ///
+replace como_lo_encontro_ = 2 if strpos(upper(como_lo_encontro), "JUNTA")!=0 ///
 					& como_lo_encontro_!=1
-replace como_lo_encontro_=3 if strpos(upper(como_lo_encontro), "REPRESENTADO")!=0 
-replace como_lo_encontro_=4 if strpos(upper(como_lo_encontro), "RECOMENDADO")!=0 
-replace como_lo_encontro_=5 if strpos(upper(como_lo_encontro), "CONOCIDO")!=0 ///
+replace como_lo_encontro_ = 3 if strpos(upper(como_lo_encontro), "REPRESENTADO")!=0 
+replace como_lo_encontro_ = 4 if strpos(upper(como_lo_encontro), "RECOMENDADO")!=0 
+replace como_lo_encontro_ = 5 if strpos(upper(como_lo_encontro), "CONOCIDO")!=0 ///
 					& strpos(upper(como_lo_encontro), "RECOMENDADO")==0
-replace como_lo_encontro_=6 if strpos(upper(como_lo_encontro), "INTERNET")!=0 
-replace como_lo_encontro_=8 if !missing(como_lo_encontro) & missing(como_lo_encontro_)
+replace como_lo_encontro_ = 6 if strpos(upper(como_lo_encontro), "INTERNET")!=0 
+replace como_lo_encontro_ = 8 if !missing(como_lo_encontro) & missing(como_lo_encontro_)
 drop como_lo_encontro
 rename como_lo_encontro_ como_lo_encontro
 					
@@ -122,38 +124,38 @@ foreach var of varlist  esquema_de_cobro_porcentaje esquema_de_cobro_pago_para_i
 	}
 	
 	
-gen  esquema_de_cobro_otro=0 if !missing(esquema_de_pago)
-replace esquema_de_cobro_otro=1 if esquema_de_cobro_porcentaje==0 & esquema_de_cobro_pago_para_inic==0
+gen  esquema_de_cobro_otro = 0 if !missing(esquema_de_pago)
+replace esquema_de_cobro_otro = 1 if esquema_de_cobro_porcentaje==0 & esquema_de_cobro_pago_para_inic==0
 drop esquema_de_pago
 
 
-gen piensa_hacer_algo_respecto_al_de=(strpos(upper(piensa_hacer_algo_respecto_al_d), "NADA")==0  ///
+gen piensa_hacer_algo_respecto_al_de = (strpos(upper(piensa_hacer_algo_respecto_al_d), "NADA")==0  ///
 		& !missing(piensa_hacer_algo_respecto_al_d))
 drop piensa_hacer_algo_respecto_al_d		
 		
-gen mas_o_menos_de_75_=.
-replace mas_o_menos_de_75_=1 if strpos(upper(mas_o_menos_de_75), "ARRIBA")!=0 
-replace mas_o_menos_de_75_=0 if strpos(upper(mas_o_menos_de_75), "ABAJO")!=0 
+gen mas_o_menos_de_75_ = .
+replace mas_o_menos_de_75_ = 1 if strpos(upper(mas_o_menos_de_75), "ARRIBA")!=0 
+replace mas_o_menos_de_75_ = 0 if strpos(upper(mas_o_menos_de_75), "ABAJO")!=0 
 drop mas_o_menos_de_75
 rename mas_o_menos_de_75_ mas_o_menos_de_75
 
-gen mas_o_menos_de_6_meses_de_sueld_=.
-replace mas_o_menos_de_6_meses_de_sueld_=1 if strpos(mas_o_menos_de_6_meses_de_sueld, "Más")!=0 
-replace mas_o_menos_de_6_meses_de_sueld_=0 if strpos(upper(mas_o_menos_de_6_meses_de_sueld), "MENOS")!=0 
+gen mas_o_menos_de_6_meses_de_sueld_ = .
+replace mas_o_menos_de_6_meses_de_sueld_ = 1 if strpos(mas_o_menos_de_6_meses_de_sueld, "MÃ¡s")!=0 
+replace mas_o_menos_de_6_meses_de_sueld_ = 0 if strpos(upper(mas_o_menos_de_6_meses_de_sueld), "MENOS")!=0 
 drop mas_o_menos_de_6_meses_de_sueld
 rename mas_o_menos_de_6_meses_de_sueld_ mas_o_menos_de_6_meses_de_sueld
 
-gen ha_iniciado_una_demanda_laboral=strpos(ha_iniciado_una_demanda_laboral_, "Primera")==0
+gen ha_iniciado_una_demanda_laboral = strpos(ha_iniciado_una_demanda_laboral_, "Primera")==0
 drop ha_iniciado_una_demanda_laboral_
 
-gen gano_el_juicio=strpos(gano_el_juicio_, "Gan")!=0 if !missing(gano_el_juicio_)
+gen gano_el_juicio = strpos(gano_el_juicio_, "Gan")!=0 if !missing(gano_el_juicio_)
 drop gano_el_juicio_
 
-gen grado_de_estudios=.
-replace grado_de_estudios=1 if strpos(grado_de_estudios_, "Primaria")!=0 
-replace grado_de_estudios=2 if strpos(grado_de_estudios_, "Secundaria")!=0 
-replace grado_de_estudios=3 if strpos(grado_de_estudios_, "Preparatoria")!=0 
-replace grado_de_estudios=4 if strpos(grado_de_estudios_, "Licenciatura")!=0
+gen grado_de_estudios = .
+replace grado_de_estudios = 1 if strpos(grado_de_estudios_, "Primaria")!=0 
+replace grado_de_estudios = 2 if strpos(grado_de_estudios_, "Secundaria")!=0 
+replace grado_de_estudios = 3 if strpos(grado_de_estudios_, "Preparatoria")!=0 
+replace grado_de_estudios = 4 if strpos(grado_de_estudios_, "Licenciatura")!=0
 drop grado_de_estudios_
 
 gen prob_num_survey = !missing(probabilidad_de_ganar)
@@ -161,8 +163,8 @@ gen cantidad_num_survey = !missing(monto_que_espera_recibir)
  
 gen origen="gforms"
 
-*Variable que se omiti� (1=Junta; por sismo)
-gen donde_lo_contacto=1
+*Variable que se omitió (1=Junta; por sismo)
+gen donde_lo_contacto = 1
 
 *Clean dates
 foreach var of varlist fecha* {
@@ -206,8 +208,8 @@ append using "$directorio\_aux\survey_gf_2w.dta"
 
 *Survey date	 
 split timestamp, gen(date_timestamp)
-gen survey_date=date(date_timestamp1, "MDY")
-replace survey_date=fecha_ultimo_intento_encuesta if missing(survey_date)
+gen survey_date = date(date_timestamp1, "MDY")
+replace survey_date = fecha_ultimo_intento_encuesta if missing(survey_date)
 format survey_date %td
 
 codebook survey_date
@@ -215,7 +217,7 @@ br
 pause
 
 duplicates drop id_actor, force
-merge 1:1 id_actor using "$directorio\_aux\treatment_data.dta",  nogen keep(1 3) ///
+merge 1:1 id_actor using "$directorio\DB\treatment_data.dta",  nogen keep(1 3) ///
  keepusing(id_actor date prob_ganar prob_mayor cantidad_ganar cant_mayor salario_diario)
 
 
@@ -226,9 +228,9 @@ gen sabemos_fecha_arreglo = !missing(fecha_del_arreglo)
 replace probabilidad_de_ganar = probabilidad_de_ganar/100 if probabilidad_de_ganar>1
 gen dias_sal = monto_que_espera_recibir/salario_diario
 gen mas_6m_aux = (dias_sal>=180) if !missing(dias_sal)
-replace mas_6m_aux= mas_o_menos_de_6_meses_de_sueld if missing(mas_6m_aux)
+replace mas_6m_aux = mas_o_menos_de_6_meses_de_sueld if missing(mas_6m_aux)
 gen mas_75_aux = (probabilidad_de_ganar >=.75) if !missing(probabilidad_de_ganar)
-replace mas_75_aux=mas_o_menos_de_75 if missing(mas_75_aux)
+replace mas_75_aux = mas_o_menos_de_75 if missing(mas_75_aux)
 gen prob_coarse_survey = !missing(mas_75_aux)
 gen cantidad_coarse_survey = !missing(mas_6m_aux)
 
@@ -236,27 +238,27 @@ gen cantidad_coarse_survey = !missing(mas_6m_aux)
 
 gen prob_ganar_fixed_survey = probabilidad_de_ganar
 qui su probabilidad_de_ganar if probabilidad_de_ganar>.75
-replace prob_ganar_fixed_survey=`r(mean)' if missing(prob_ganar_fixed_survey) & mas_75_aux==1
+replace prob_ganar_fixed_survey = `r(mean)' if missing(prob_ganar_fixed_survey) & mas_75_aux==1
 qui su probabilidad_de_ganar if probabilidad_de_ganar<=.75
-replace prob_ganar_fixed_survey=`r(mean)' if missing(prob_ganar_fixed_survey) & mas_75_aux==0
+replace prob_ganar_fixed_survey = `r(mean)' if missing(prob_ganar_fixed_survey) & mas_75_aux==0
 
 gen cantidad_ganar_fixed_survey = monto_que_espera_recibir
 qui su dias_sal if dias_sal>180, d
-replace cantidad_ganar_fixed_survey=`r(p50)'*salario_diario if missing(cantidad_ganar_fixed_survey) & mas_6m_aux==1
+replace cantidad_ganar_fixed_survey = `r(p50)'*salario_diario if missing(cantidad_ganar_fixed_survey) & mas_6m_aux==1
 qui su dias_sal if dias_sal<=180
-replace cantidad_ganar_fixed_survey=`r(mean)'*salario_diario if missing(cantidad_ganar_fixed_survey) & mas_6m_aux==0
+replace cantidad_ganar_fixed_survey = `r(mean)'*salario_diario if missing(cantidad_ganar_fixed_survey) & mas_6m_aux==0
 
 gen prob_ganar_fixed = prob_ganar
 qui su prob_ganar if prob_ganar>.75
-replace prob_ganar_fixed=`r(mean)' if missing(prob_ganar_fixed) & prob_mayor==1
+replace prob_ganar_fixed = `r(mean)' if missing(prob_ganar_fixed) & prob_mayor==1
 qui su prob_ganar if prob_ganar<=.75
-replace prob_ganar_fixed_survey=`r(mean)' if missing(prob_ganar_fixed) & prob_mayor==0
+replace prob_ganar_fixed_survey = `r(mean)' if missing(prob_ganar_fixed) & prob_mayor==0
 
 gen cantidad_ganar_fixed = cantidad_ganar
 qui su dias_sal if dias_sal>180, d
-replace cantidad_ganar_fixed=`r(p50)'*salario_diario if missing(cantidad_ganar_fixed) & cant_mayor==1
+replace cantidad_ganar_fixed = `r(p50)'*salario_diario if missing(cantidad_ganar_fixed) & cant_mayor==1
 qui su dias_sal if dias_sal<=180
-replace cantidad_ganar_fixed=`r(mean)'*salario_diario if missing(cantidad_ganar_fixed) & cant_mayor==0
+replace cantidad_ganar_fixed = `r(mean)'*salario_diario if missing(cantidad_ganar_fixed) & cant_mayor==0
 
 gen update_prob_survey = (probabilidad_de_ganar - prob_ganar)/prob_ganar
 gen update_comp_survey = (monto_que_espera_recibir - cantidad_ganar)/cantidad_ganar
@@ -281,17 +283,17 @@ rename mas_6m_aux cant_mayor_survey
 
 
 foreach var of varlist *_survey {
-	replace `var'=. if conflicto_arreglado==1
+	replace `var' = . if conflicto_arreglado==1
 	}
 	
 
 foreach var of varlist cond_hablo_con* {
-	replace `var'=. if ha_hablado_con_abogado_publico==0 & ha_hablado_con_abogado_privado==0
+	replace `var' = . if ha_hablado_con_abogado_publico==0 & ha_hablado_con_abogado_privado==0
 	}
 
 *Gen variables
-gen coyote=inlist(como_lo_encontro, 1,2) if !missing(como_lo_encontro)
-replace coyote=1 if como_lo_encontro==8 & (especifique=="dentro de la junta" | especifique=="afuera de la oficina del m�dulo") ///
+gen coyote = inlist(como_lo_encontro, 1,2) if !missing(como_lo_encontro)
+replace coyote = 1 if como_lo_encontro==8 & (especifique=="dentro de la junta" | especifique=="afuera de la oficina del módulo") ///
 					& !missing(coyote)
 
 *Drop variables

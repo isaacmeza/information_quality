@@ -1,4 +1,8 @@
-setwd('C:/Users/xps-seira/Dropbox/Apps/ShareLaTeX/pilot3/Pilot_3/RScripts')
+# Indicate path of Rscripts files
+setwd('C:/Users/isaac/Dropbox/Apps/ShareLaTeX/information_lawyer_quality/RScripts')
+
+# Script that defines functions and installs required packages.
+# IMPORTANT : Required to use Rtools 'https://cran.rstudio.com/bin/windows/Rtools
 
 source('setup-toolbox.R', encoding = 'utf8')
 source('varnames_codebook.R')
