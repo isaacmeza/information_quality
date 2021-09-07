@@ -1,5 +1,6 @@
 /*
 Cleaning Administrative Data. The source for this dataset is the 'modulo' at the entrance of the MCLC
+Author : Isaac Meza
 */
 
 
@@ -57,6 +58,7 @@ save `temp'
 
 
 import delimited "$directorio\_aux\treatment_data.csv", clear
+gen hola = _n
 duplicates drop
 drop if missing(fecha_alta)
 drop if id_main<16 & !missing(id_main)
@@ -80,7 +82,9 @@ merge 1:1 id_actor using `temp', nogen keep(1 3) keepusing(id_actor grado_estudi
 replace nivel_educativo = grado_estudios if missing(nivel_educativo)
 drop grado_estudios
 
-*Covariates
+****************************************
+*             Covariates
+****************************************
 
 *Tenure	
 replace antiguedad = (fecha_salida - fecha_entrada)/365 if missing(antiguedad)
@@ -88,6 +92,15 @@ replace antiguedad = . if antiguedad<0 | antiguedad>60
 		 
 * Hack porque no hay antiguedad antes de esa fecha
 replace antiguedad = . if fecha_alta <= date("2017-07-14","YMD")
+
+*Imputation with mean for missing values
+qui su antiguedad
+replace antiguedad = `r(mean)' if missing(antiguedad)
+
+*Daily wage
+*Imputation with mean for missing values
+qui su salario_diario
+replace salario_diario = `r(mean)' if missing(salario_diario)
 
 gen na_prob = 0
 replace na_prob = 1 if missing(prob_ganar)
@@ -141,31 +154,43 @@ gen dow = dow( date )
 gen mon_tue = inrange(dow,1,2)
 
 
+
+****************************************
+*         Treatment variables
+****************************************
+
 *Separate arm 2 into 2A & 2B
 merge m:1 date using "$directorio\_aux\randomization_arm2.dta", nogen keep(1 3)
-replace grupo_tratamiento=tratamiento_grupo if grupo_tratamiento=="2" & !missing(tratamiento_grupo)
-replace grupo_tratamiento="2A" if grupo_tratamiento=="2"
+replace grupo_tratamiento = tratamiento_grupo if grupo_tratamiento=="2" & !missing(tratamiento_grupo)
+replace grupo_tratamiento = "2A" if grupo_tratamiento=="2"
 
-egen treatment = group(grupo_tratamiento)
+*Treatment variable with all arms
+encode grupo_tratamiento, gen(treatment)
 
-*Treatment
+*Main treatment variable
 gen tratamiento = substr(grupo_tratamiento,1,1)
-egen main_treatment = group(tratamiento)
+label define main_tr  1 "Control" 2 "Calculator" 3 "Calculator + letter"
+encode tratamiento, gen(main_treatment) 
+label values main_treatment main_tr
 *Keep sample when experiment was ran for the 3 treatments
 replace main_treatment = . if fecha_alta>=date("20/08/2018","DMY")
-drop tratamiento
 
-*A vs B
+
+*A/B treatment
 gen grupo = substr(grupo_tratamiento,2,1)
-egen group = group(grupo)
-drop grupo
+label define ab_tr  1 "A" 2 "B" 
+encode grupo, gen(ab_treatment) 
+label values ab_treatment ab_tr
+
 
 *Fix NEW A/B (replacing 'pre-earthquake')
-replace group = . if inrange(date,date("19-09-2017","DMY"),date("20-08-2018","DMY"))
+replace ab_treatment = . if inrange(date,date("19-09-2017","DMY"),date("20-08-2018","DMY"))
 
 *NEW A/B!!!
 *replace group=. if date<date("20-08-2018","DMY")
 
+*Drop redundant treatment variables
+drop tratamiento_voluntario grupo_tratamiento tratamiento_grupo tratamiento grupo 
 
 *Paste names of 'demandados'
 merge m:1 id_main using "$directorio\_aux\demandados_tr.dta", nogen keep(1 3)

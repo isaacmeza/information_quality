@@ -1,13 +1,9 @@
 /*
-
-**  Isaac Meza, isaac.meza@berkeley.edu
-
-
 Master do file for cleaning of data 
 	- Admin
 	- 2w Survey
 	- 2M Survey
-	
+Author : Isaac Meza, isaac.meza@berkeley.edu
 */		
 
 

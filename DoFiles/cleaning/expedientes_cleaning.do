@@ -1,3 +1,7 @@
+/*
+Cleaning and reading of administrative data on 'suing' based on MCLC dataset
+Author : Isaac Meza
+*/
 
 ********************************************************************************
 forvalues j = 1/3 {
