@@ -1,8 +1,3 @@
-/*
-Fuzzy match to compare 'sue' according to administrative & survey data
-Author : Isaac Meza
-*/
-
 use "$directorio\_aux\expedientes_long.dta", clear
 keep if demanda==1
 egen idadmin = group(FOLIO)

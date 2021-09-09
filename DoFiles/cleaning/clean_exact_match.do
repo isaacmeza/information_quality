@@ -1,7 +1,4 @@
-/*
-Exact match to compare 'sue' according to administrative & survey data
-Author : Isaac Meza
-*/
+*EXACT MATCHING - Cleaning
 
 use "$directorio\DB\treatment_data.dta", clear
 keep nombre_actor nombre_demandado* id_actor

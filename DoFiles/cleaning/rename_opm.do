@@ -1,7 +1,4 @@
-/*
-Rename variables in OPM dataset
-Author : Isaac Meza
-*/
+
 
 program  rename_opm
 
