@@ -1,30 +1,10 @@
+/*
+Office FE heterogeneity on observed quality measures.
+Author :  Isaac Meza
+*/
 
-use "$directorio\DB\lawyer_dataset.dta", clear
+********************************************************************************
 
-*Generation of variables of interest
-do "$directorio\DoFiles\gen_measures.do"
-
-
-*Variable name cleaning
-foreach var of varlist perc* {
-	local nvar=substr("`var'",6,.)
-	cap rename `var' `nvar'
-	}
-
-foreach var of varlist ratio* {
-	local nvar=substr("`var'",7,.)
-	cap rename `var' `nvar'
-	}
-
-bysort gp_office : gen num_casefiles=_N
-drop if num_casefiles<=4
-sort gp_office
-egen id=group(gp_office)
-*FE Office	
-xi i.id, noomit
-
-
-	
 // GRAPH FORMATTING
 // For graphs:
 local labsize medlarge
@@ -47,8 +27,33 @@ local rcap_options_0  lcolor(gs7)   lwidth(thin)
 local rcap_options_90 lcolor(gs7)   lwidth(thin)
 local rcap_options_95 lcolor(black) lwidth(thin)
 
+
+use "$directorio\DB\lawyer_dataset.dta", clear
+
+*Generation of variables of interest
+do "$directorio\DoFiles\cleaning\gen_measures.do"
+
+
+*Variable name cleaning
+foreach var of varlist perc* {
+	local nvar = substr("`var'",6,.)
+	cap rename `var' `nvar'
+	}
+
+foreach var of varlist ratio* {
+	local nvar = substr("`var'",7,.)
+	cap rename `var' `nvar'
+	}
+
+bysort gp_office : gen num_casefiles = _N
+drop if num_casefiles<=4
+sort gp_office
+egen id = group(gp_office)
+*FE Office	
+xi i.id, noomit
+
 	
-foreach varj of varlist pos_rec duration win_minley {
+foreach varj of varlist pos_rec  win_minley {
 	*wrt procu
 	qui reg `varj' $input_varlist $sd_input_varlist $bvc _Iid_1-_Iid_`=${lista1}-1' _Iid_`=${lista1}+1'-_Iid_138 if _Iid_60!=1 & _Iid_138!=1, r
 	
@@ -109,6 +114,6 @@ forval row = 1/138 {
 	;
 	
 	#delimit cr
-	graph export "$directorio\Figuras\betas_`varj'.pdf", replace
+	*graph export "$directorio\Figuras\betas_`varj'.pdf", replace
 	restore
 	}

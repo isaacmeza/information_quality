@@ -6,4 +6,4 @@ clear
 set more off
  
  
-rcd "$directorio/DoFiles"  : find *.do , match(randomization_arm2) show
+rcd "$directorio/DoFiles"  : find *.do , match(sd_varlist_input) show

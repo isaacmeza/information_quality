@@ -1,5 +1,6 @@
 /*
 Cleaning Survey Data. The source for this datasets is the follow-up surveys at 2w 
+Author : Isaac Meza
 */
 
 pause on
@@ -78,7 +79,7 @@ rename (`oldnames') (timestamp
 bysort id_actor : gen num_intentos = _N
 keep if status_encuesta=="Exitosa"
 drop status_encuesta
-gen status_encuesta=1
+gen status_encuesta = 1
 
 
 
@@ -88,7 +89,7 @@ foreach var of varlist  conflicto_arreglado reinstalacion dice_cantidad ///
 		ha_hablado_con_abogado_privado firmo_carta_poder sigue_buscando_alternativas_pri ///
 		tramito_alguna_cita_de_conc {
 	
-	gen `var'_ = (strpos(`var', "SÃ")!=0) if !missing(`var') & length(`var')<=4
+	gen `var'_ = (strpos(`var', "S")!=0) if !missing(`var') & length(`var')<=4
 	drop `var'
 	rename `var'_ `var'
 	}
@@ -140,8 +141,8 @@ drop mas_o_menos_de_75
 rename mas_o_menos_de_75_ mas_o_menos_de_75
 
 gen mas_o_menos_de_6_meses_de_sueld_ = .
-replace mas_o_menos_de_6_meses_de_sueld_ = 1 if strpos(mas_o_menos_de_6_meses_de_sueld, "MÃ¡s")!=0 
-replace mas_o_menos_de_6_meses_de_sueld_ = 0 if strpos(upper(mas_o_menos_de_6_meses_de_sueld), "MENOS")!=0 
+replace mas_o_menos_de_6_meses_de_sueld_ = 1 if strpos(mas_o_menos_de_6_meses_de_sueld, "Más")!=0 
+replace mas_o_menos_de_6_meses_de_sueld_ = 0 if strpos(mas_o_menos_de_6_meses_de_sueld, "Menos")!=0 
 drop mas_o_menos_de_6_meses_de_sueld
 rename mas_o_menos_de_6_meses_de_sueld_ mas_o_menos_de_6_meses_de_sueld
 

@@ -45,3 +45,7 @@ vignettes/*.pdf
 # Auxiliary data files
 /_aux/
 /_aux/**
+
+# ipynb
+/.ipynb_checkpoints/
+/.ipynb_checkpoints/**

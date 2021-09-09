@@ -1,37 +1,26 @@
 %\documentclass[AER, draftmode]{AEA}
-\documentclass[12 pt]{article}
-\usepackage{amssymb,amsmath,amsfonts,eurosym,geometry,ulem,graphicx,caption,color,setspace,sectsty,comment,caption,natbib,pdflscape,subfigure,array,hyperref, booktabs, float}
-\usepackage[labelfont=bf]{caption}
-\usepackage{fixltx2e}
-\usepackage[bottom]{footmisc}
-
-\normalem
-
+ \documentclass[oneside,12pt]{article}
+\input{preamble.tex}
 \onehalfspacing
-\newtheorem{theorem}{Theorem}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{proposition}{Proposition}
-\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
 
-\newtheorem{hyp}{Hypothesis} 
-\newtheorem{subhyp}{Hypothesis}[hyp]
-\renewcommand{\thesubhyp}{\thehyp\alph{subhyp}}
+%%% HELPER CODE FOR DEALING WITH EXTERNAL REFERENCES
+\usepackage{xr}
+\makeatletter
+\newcommand*{\addFileDependency}[1]{
+  \typeout{(#1)}
+  \@addtofilelist{#1}
+  \IfFileExists{#1}{}{\typeout{No file #1.}}
+}
+\makeatother
 
-\newcommand{\red}[1]{{\color{red} #1}}
-\newcommand{\blue}[1]{{\color{blue} #1}}
 
-\newcolumntype{L}[1]{>{\raggedright\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
-\newcolumntype{C}[1]{>{\centering\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
-\newcolumntype{R}[1]{>{\raggedleft\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+\newcommand*{\myexternaldocument}[1]{
+    \externaldocument{#1}
+    \addFileDependency{#1.tex}
+    \addFileDependency{#1.aux}
+}
 
-\geometry{left=1.0in,right=1.0in,top=1.0in,bottom=1.0in}
-%\graphicspath{ {images/} }
-%-------------------------------------------------------
-%De AEA
-% \newcommand\EightPtClose{\@setfontsize\EightPtClose\@viiipt{9}}
-% \def\notesize{\EightPtClose}
-\newenvironment{figurenotes}[1][\footnotesize{Note}]{\begin{minipage}[t]{\linewidth}\footnotesize{\itshape#1: }}{\end{minipage}}
-
+%\myexternaldocument{OA}
 %----------------------------------------------------------------
 
 \begin{document}
@@ -102,14 +91,21 @@ Lawyer’s education and quality varies widely\footnote{Former minister of Mexic
 Choosing the right lawyer is critical because, once a case is filed, lawyers control the lawsuits almost completely. All lawyers require the workers they represent to sign a power of attorney. The standard power of attorney gives broad powers to the lawyer, including dropping the lawsuit with the worker being present to ratify the decision\footnote{In August 2017 the Mexican Supreme Court created jurisprudence stating that in labor lawsuits, when a worker has signed a broad power of attorney allowing her lawyer to drop the lawsuit on her behalf, then the lawyer can drop the suit without the presence or ratification by the worker, see \url{http://sjf.scjn.gob.mx/SJFSist/Paginas/Reportes/ReporteDE.aspx?idius=27262&Tipo=2&Tema=0}, accessed 30 August 2019.}.  Also, the court procedures do not oblige the worker herself to attend any hearings, except to provide her own deposition, should that be required as evidence. The importance of the choice of lawyers is also indicated by evidence that some lawyers may not take the actions that best represent their clients’ interests. Sadka et al. (2019) provide evidence of agency issues in representation, and show that in 40 percent of lawsuits, workers pay more than they receive, in the sense that what they recover is lower than the fees they pay the lawyers (and this even without taking into account the effort, stress and risk workers incur). We also show evidence below that lawyers sometimes file suits without plaintiffs knowing. 
 
 \begin{figure}[!htbp] %Falta arreglar caption--------------
-    \centering
     \caption{Lawyer fixed effects, controlling for variables of the case}
-    \captionsetup{singlelinecheck = false}
-    \caption*{\qquad \qquad (a)	Amount won as a	\qquad \qquad \qquad (b) Recovered a positive amount\\
-    \phantom{)}\hspace{1.5cm} percentage of amount asked}
-    \includegraphics[width=0.8\textwidth]{Figures/Figure1.png}
-    
-    \caption*{Panel (a): Dependent variable is the amount won divided by the law minimum. Each coefficient corresponds to a different law firm dummy. Panel (b): Dependent variable is an indicator of winning a positive amount. Each coefficient corresponds to a different law firm dummy. The regression controls for variables of the case.}
+     \begin{center}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Amount won as a percentage of amount asked}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betas_ql_win_minley.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Recovered a positive amount}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betas_ql_pos_rec.pdf}
+    \end{subfigure}
+    \end{center}
+    \scriptsize{ \noindent Panel (a): Dependent variable is the amount won divided by the law minimum. Each coefficient corresponds to a different law firm dummy. Panel (b): Dependent variable is an indicator of winning a positive amount. Each coefficient corresponds to a different law firm dummy. The regression controls for variables of the case.
+    \textit{Do file: }  \texttt{fe\_quality\_betas.do}}
     \label{fig:1}
 \end{figure}
 %----------------------------------------------------------
@@ -131,10 +127,12 @@ We then asked workers for additional information about their employment contract
 It is important to note that in the text of the personalized calculator, received by both calculator and calculator+letter treatment groups, we include a phrase stating that the uncertainty involved in carrying out an entire labor lawsuit makes conciliation talks in search of a settlement an attractive strategy for both parties. As will be seen in our results, notwithstanding this clear message, the effects on conciliation are much stronger for workers in the calculator+letter group, perhaps indicating that without providing workers with a clear immediate course of action, the effects of the calculator on settlement behavior is far smaller.
 
 \begin{figure}[!htbp] %Falta arreglar caption--------------
-    \centering
+   \begin{center}
+   \centering
     \caption{Personalized calculator printout}
     \includegraphics[width=0.8\textwidth]{Figures/Figure2.png}
     \label{fig:2}
+    \end{center}
 \end{figure}
 %----------------------------------------------------------
 
@@ -322,17 +320,18 @@ Results for amounts are noisier both because the variance on amount is large and
 % \end{figure}%-----------------------------------------------
 
 %--------------------------------------------
-\begin{table}[!ht]
+\begin{table}[H]
     \caption{Expectations updating} 
     \label{tab:6_TE_updating}
-    \center
-    \notesize{\input{./Tables_E2L/Table6_TE_updating.tex}}
-    \begin{figurenotes}
-    The table estimates the effect of the information treatment on immediate expectation updating. All control group observations are coded as being unchanged from baseline to follow-up, and hence the coefficients for the two treatment groups reflect a simple difference between baseline and immediate follow-up. The dependent variable in Column (1) regresses an indicator variable equal to 1 if the respondent reported a lower probability of winning from the first to the second survey, and Column (2) is the continuous variable for the change in the probability of winning across the two surveys. The dependent variable in Column (3) is an indicator that the amount the worker expected to win was lower in the second survey compared with the first, and in Column (4) is the change in the log of the amount the worker expected to win.
-    \end{figurenotes}
-    %\textit{Do file: } \texttt{TE_updating}
-  
+    \begin{center}
+    \scriptsize{\input{./Tables/te_updating.tex}}
+    \end{center}
+     \scriptsize {\noindent The table estimates the effect of the information treatment on immediate expectation updating. All control group observations are coded as being unchanged from baseline to follow-up, and hence the coefficients for the two treatment groups reflect a simple difference between baseline and immediate follow-up. The dependent variable in Column (1) regresses an indicator variable equal to 1 if the respondent reported a lower probability of winning from the first to the second survey, and Column (2) is the continuous variable for the change in the probability of winning across the two surveys. The dependent variable in Column (3) is an indicator that the amount the worker expected to win was lower in the second survey compared with the first, and in Column (4) is the change in the log of the amount the worker expected to win.
+    \textit{Do file: } \texttt{te\_updating.do}
+}
 \end{table}
+  
+    
 %--------------------------------------------
 
 
@@ -347,14 +346,13 @@ The results on Table 7 indicate that the treatment had an effect on the decision
 \begin{table}[!ht]
     \caption{Effects on settlement, talking to lawyers, and suing} 
     \label{tab:7_TE_action}
-    \center
-    \notesize{\input{./Tables_E2L/Table7_TE_action.tex}}
-    \begin{figurenotes}
-    Data form the follow-up surveys at 2 weeks or 2 months, as indicated. The dependent variables correspond to survey responses to the following questions: (Solved Conflict) “Have you arrived to an agreement with your former employer?", (Talked to Lawyer) “Have you spoken to any public lawyer or any person from the public prosecutor's office or Have you spoken to any private lawyer?”, (Sued) “Did you sue your former employer?”.
-    \end{figurenotes}
-    %\textit{Do file: } \texttt{TE_action}
-  
+    \begin{center}
+    \footnotesize{\input{./Tables/te_main_outcomes.tex}}
+    \end{center}
+    \scriptsize {\noindent Data form the follow-up surveys at 2 weeks or 2 months, as indicated. The dependent variables correspond to survey responses to the following questions: (Solved Conflict) “Have you arrived to an agreement with your former employer?", (Talked to Lawyer) “Have you spoken to any public lawyer or any person from the public prosecutor's office or Have you spoken to any private lawyer?”, (Sued) “Did you sue your former employer?”.
+    \textit{Do file: } \texttt{te\_main\_outcomes.do}}
 \end{table}
+
 %--------------------------------------------
 
 

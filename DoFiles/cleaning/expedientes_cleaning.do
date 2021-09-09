@@ -1,7 +1,11 @@
+/*
+Cleaning and reading of administrative data on 'suing' based on MCLC dataset
+Author : Isaac Meza
+*/
 
 ********************************************************************************
 forvalues j = 1/3 {
-import excel "$directorio\Raw\expedientes_`j'.xlsx", sheet("Detalle actores") firstrow clear
+import excel "$directorio\Raw\OFIREC\expedientes_`j'.xlsx", sheet("Detalle actores") firstrow clear
 drop FECHA_INGRESO JUNTA
 
 duplicates drop
@@ -13,7 +17,7 @@ save "$directorio\_aux\detalle_actores_long_`j'.dta", replace
 
 ********************************************************************************
 forvalues j = 1/3 {
-import excel "$directorio\Raw\expedientes_`j'.xlsx", sheet("Detalle demandados") firstrow clear
+import excel "$directorio\Raw\OFIREC\expedientes_`j'.xlsx", sheet("Detalle demandados") firstrow clear
 drop FECHA_INGRESO JUNTA
 
 duplicates drop
@@ -25,7 +29,7 @@ save "$directorio\_aux\detalle_demandados_long_`j'.dta", replace
 
 ********************************************************************************
 forvalues j = 1/3 {
-import excel "$directorio\Raw\expedientes_`j'.xlsx", sheet("Demandas gral") firstrow clear
+import excel "$directorio\Raw\OFIREC\expedientes_`j'.xlsx", sheet("Demandas gral") firstrow clear
 drop FECHA_INGRESO
 
 duplicates drop
@@ -38,7 +42,7 @@ save "$directorio\_aux\demandas_gral_`j'.dta", replace
 
 ********************************************************************************
 forvalues j = 1/3 {
-import excel "$directorio\Raw\expedientes_`j'.xlsx", sheet("Convenios") firstrow clear
+import excel "$directorio\Raw\OFIREC\expedientes_`j'.xlsx", sheet("Convenios") firstrow clear
 drop FECHA_INGRESO
 
 duplicates drop

@@ -1,5 +1,6 @@
 /*
 Cleaning Survey Data. The source for this datasets is the follow-up surveys at 2m 
+Author : Isaac Meza
 */
 
 pause on
@@ -27,7 +28,7 @@ do "$directorio\DoFiles\cleaning\rename_opm.do"
 
 forvalues t = 1/4 {	
 
-	use "$directorio\Raw\transferencia_`t'.dta", clear
+	use "$directorio\Raw\opm\transferencia_`t'.dta", clear
 	
 	rename_opm
 
@@ -127,7 +128,11 @@ forvalues t = 1/4 {
 	rename enojo_con_la_empresa_ enojo_con_la_empresa
 
 	gen  mas_o_menos_de_75 = strpos(mas_o_menos_de_75_, "Mas")!=0 if !missing(mas_o_menos_de_75_)
+	replace mas_o_menos_de_75 = . if strpos(lower(mas_o_menos_de_75_), "no")!=0
+	
 	gen  mas_o_menos_de_6_meses_de_sueldo = strpos(mas_o_menos_de_6_meses_de_sueld_, "Mas")!=0 if !missing(mas_o_menos_de_6_meses_de_sueld_)
+	replace mas_o_menos_de_6_meses_de_sueldo = . if strpos(lower(mas_o_menos_de_6_meses_de_sueld_), "no")!=0
+
 	drop mas_o_menos_de_75_  mas_o_menos_de_6_meses_de_sueld_
 
 
@@ -135,7 +140,7 @@ forvalues t = 1/4 {
 	replace que_elemento_es_el_mas_important = 1 if strpos(lower(elemento_elaborar_expectativas), "dicho")!=0 & ///
 			strpos(lower(elemento_elaborar_expectativas), "abogado")!=0 
 	replace que_elemento_es_el_mas_important = 2 if strpos(lower(elemento_elaborar_expectativas), "dijeron")!=0 & ///
-			strpos(lower(elemento_elaborar_expectativas), "módulo")!=0 & ///
+			strpos(lower(elemento_elaborar_expectativas), "dulo")!=0 & ///
 			strpos(lower(elemento_elaborar_expectativas), "junta")!=0 
 	replace que_elemento_es_el_mas_important = 3 if strpos(lower(elemento_elaborar_expectativas), "dijeron")!=0 & ///
 			strpos(lower(elemento_elaborar_expectativas), "otra")!=0 & ///
@@ -347,7 +352,7 @@ foreach var of varlist  conflicto_arreglado reinstalacion se_registro_el_acuerdo
 	ha_dejado_de_pagar_servicio_bas ha_faltado_dinero_para_comida ///
 	trabaja_actualmente busca_trabajo asistio_patron_a_la_cita entablo_demanda {
 	
-	gen `var'_ = (strpos(`var', "SÃ")!=0) if !missing(`var') & length(`var')<=4
+	gen `var'_ = (strpos(`var', "S")!=0) if !missing(`var') & length(`var')<=4
 	drop `var'
 	rename `var'_ `var'
 	}
@@ -388,7 +393,7 @@ replace tiempo_arreglar_asunto = 3 if tiempo_arreglar_asunto_=="5.01 - 10 horas"
 replace tiempo_arreglar_asunto = 4 if tiempo_arreglar_asunto_=="10.01 - 15 horas"
 replace tiempo_arreglar_asunto = 5 if tiempo_arreglar_asunto_=="15.01 - 20 horas"
 replace tiempo_arreglar_asunto = 6 if tiempo_arreglar_asunto_=="20.01 - 30 horas"
-replace tiempo_arreglar_asunto = 7 if tiempo_arreglar_asunto_=="MÃ¡s de 30 horas"
+replace tiempo_arreglar_asunto = 7 if strpos(tiempo_arreglar_asunto_, "de 30 horas")!=0
 
 gen tiempo_arreglar_asunto_imputed = .
 replace tiempo_arreglar_asunto_imputed = 1 if tiempo_arreglar_asunto_=="0-2 horas"
@@ -397,12 +402,14 @@ replace tiempo_arreglar_asunto_imputed = 7.5 if tiempo_arreglar_asunto_=="5.01 -
 replace tiempo_arreglar_asunto_imputed = 12.5 if tiempo_arreglar_asunto_=="10.01 - 15 horas"
 replace tiempo_arreglar_asunto_imputed = 17.5 if tiempo_arreglar_asunto_=="15.01 - 20 horas"
 replace tiempo_arreglar_asunto_imputed = 25 if tiempo_arreglar_asunto_=="20.01 - 30 horas"
-replace tiempo_arreglar_asunto_imputed = 30 if tiempo_arreglar_asunto_=="MÃ¡s de 30 horas"
+replace tiempo_arreglar_asunto_imputed = 30 if strpos(tiempo_arreglar_asunto_, "de 30 horas")!=0
 
 drop tiempo_arreglar_asunto_
 
-gen  mas_o_menos_de_75 = strpos(mas_o_menos_de_75_, "MÃ¡s")!=0 if !missing(mas_o_menos_de_75_)
-gen  mas_o_menos_de_6_meses_de_sueldo = strpos(mas_o_menos_de_6_meses_de_sueld_, "MÃ¡s")!=0 if !missing(mas_o_menos_de_6_meses_de_sueld_)
+gen  mas_o_menos_de_75 = strpos(mas_o_menos_de_75_, "Más")!=0 if !missing(mas_o_menos_de_75_)
+replace mas_o_menos_de_75 = . if strpos(mas_o_menos_de_75_, "No sabe")!=0
+gen  mas_o_menos_de_6_meses_de_sueldo = strpos(mas_o_menos_de_6_meses_de_sueld_, "Más")!=0 if !missing(mas_o_menos_de_6_meses_de_sueld_)
+replace mas_o_menos_de_6_meses_de_sueldo = . if strpos(mas_o_menos_de_6_meses_de_sueld_, "No sabe")!=0
 drop mas_o_menos_de_75_  mas_o_menos_de_6_meses_de_sueld_
 
 foreach var of varlist enojo_con_la_empresa como_lo_consiguio  elemento_elaborar_expectativas {
