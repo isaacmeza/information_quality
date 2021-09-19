@@ -12,13 +12,22 @@ local files : dir "$directorio\Raw\calif\id_iniciales\" files "*.csv"
 local i = 1
 foreach file in `files' {	
 	import delimited "$directorio\Raw\calif\id_iniciales\\`file'" ,  clear
+	capture confirm variable expediente
+	if !_rc {
+		*Recover junta/exp/anio
+		split expediente, parse("_")
+		destring expediente*, replace
+		rename (expediente1 expediente2 expediente3) (junta exp anio)
+	}
 	tempfile temp_id_`i'
 	save `temp_id_`i''
 	local i = `i' + 1
 }
 
 use `temp_id_1', clear
-append using `temp_id_2'
+forvalues j = 2/`=`i'-1' {
+	append using `temp_id_`j''
+}
 
 keep junta exp anio folio
 
@@ -90,5 +99,5 @@ drop numero_abogado expediente
 
 duplicates drop folio calif* total prediccion_a prediccion_b monto, force
 	
-merge 1:1 folio using `temp_id', nogen 
+merge 1:1 folio using `temp_id', nogen keep(3)
 save "$directorio\DB\lawyer_scores_p3.dta" , replace
