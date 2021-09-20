@@ -4,69 +4,100 @@ Author : Isaac Meza
 */
 
 ********************************************************************************
-*******************************               **********************************
+***************************** Id - iniciales ***********************************
 ********************************************************************************
 
-import excel $directorio\Raw\calif\expedientesLaura2021.xlsx , firstrow  clear
-keep junta exp anio Folio
-rename Folio folio
+local files : dir "$directorio\Raw\calif\id_iniciales\" files "*.csv" 
+
+local i = 1
+foreach file in `files' {	
+	import delimited "$directorio\Raw\calif\id_iniciales\\`file'" ,  clear
+	capture confirm variable expediente
+	if !_rc {
+		*Recover junta/exp/anio
+		split expediente, parse("_")
+		destring expediente*, replace
+		rename (expediente1 expediente2 expediente3) (junta exp anio)
+	}
+	tempfile temp_id_`i'
+	save `temp_id_`i''
+	local i = `i' + 1
+}
+
+use `temp_id_1', clear
+forvalues j = 2/`=`i'-1' {
+	append using `temp_id_`j''
+}
+
+keep junta exp anio folio
+
 tempfile temp_id
 save `temp_id'
 
-
 ********************************************************************************
-*******************************               **********************************
+******************************* Scores *****************************************
 ********************************************************************************
+local var_calif abogado numero_abogado expediente calif_rubro_proemio just_rubro_proemio calif_prestaciones just_prestaciones calif_hechos just_hechos calif_derechos just_derechos calif_puntos_petitorios just_puntos_petitorios total prediccion_a prediccion_b monto
 
-import delimited $directorio\Raw\calif\Captura_CalidadDemandas_BD_Laura.csv ,   clear
+local files : dir "$directorio\Raw\calif\captura_calidad\" files "*.csv" 
 
-drop v* nombreactor
+local i = 1
+foreach file in `files' {	
+	import delimited "$directorio\Raw\calif\captura_calidad\\`file'", clear colrange(:17) bindquote(strict)
 
-foreach var of varlist * {
-	local varlabel : var label `var'
-	local clean_name = stritrim(trim(itrim(lower("`varlabel'"))))
-	local clean_name = subinstr("`clean_name'", " ","_",.)
-	local clean_name = subinstr("`clean_name'", "/","_",.)
-	local clean_name = subinstr("`clean_name'", "#","",.)
-	local clean_name = subinstr("`clean_name'", "ñ","ni",.)
-	local clean_name = subinstr("`clean_name'", "_de_","_",.)
-	local clean_name = subinstr("`clean_name'", "_del_","_",.)
-	local clean_name = subinstr("`clean_name'", "_la_","_",.)
-	local clean_name = subinstr("`clean_name'", "_las_","_",.)	
-	local clean_name = subinstr("`clean_name'", "_por_","_",.)	
-	local clean_name = subinstr("`clean_name'", "_el_","_",.)	
-	local clean_name = subinstr("`clean_name'", "_en_","_",.)	
-	local clean_name = subinstr("`clean_name'", "_que_","_",.)		
-	local clean_name = subinstr("`clean_name'", "_y_","_",.)
-	local clean_name = subinstr("`clean_name'", "á", "a", .)
-	local clean_name = subinstr("`clean_name'", "é", "e", .)
-	local clean_name = subinstr("`clean_name'", "í", "i", .)
-	local clean_name = subinstr("`clean_name'", "ó", "o", .)
-	local clean_name = subinstr("`clean_name'", "ú", "u", .)
-	local clean_name = subinstr("`clean_name'", "Á", "a", .)
-	local clean_name = subinstr("`clean_name'", "É", "e", .)
-	local clean_name = subinstr("`clean_name'", "Í", "i", .)
-	local clean_name = subinstr("`clean_name'", "Ó", "o", .)
-	local clean_name = subinstr("`clean_name'", "Ú", "u", .)
-	local clean_name = subinstr("`clean_name'", "â", "a", .)
-	local clean_name = subinstr("`clean_name'", "ê", "e", .)
-	local clean_name = subinstr("`clean_name'", "î", "i", .)
-	local clean_name = subinstr("`clean_name'", "ô", "o", .)
-	local clean_name = subinstr("`clean_name'", "ù", "u", .)
-	local clean_name = subinstr("`clean_name'", "Â", "a", .)
-	local clean_name = subinstr("`clean_name'", "Ê", "e", .)
-	local clean_name = subinstr("`clean_name'", "Î", "i", .)
-	local clean_name = subinstr("`clean_name'", "Ô", "o", .)
-	local clean_name = subinstr("`clean_name'", "Û", "u", .)	
-	local clean_name = substr("`clean_name'",1,30)
-	cap rename `var' `clean_name'
+	*Rename 
+	local oldnames = ""
+	foreach var of varlist _all  {
+	local oldnames `oldnames' `var'
+	}
+	di "`oldnames'"
+	rename (`oldnames') (`var_calif') 
+
+	tempfile temp_`i'
+	save `temp_`i''
+	local i = `i' + 1
 }
 
-*Gen id iof lawyer
+use `temp_1', clear
+forvalues j = 2/`=`i'-1' {
+	append using `temp_`j''
+}
+
+duplicates drop
+
+*Lawyer name
+bysort numero_abogado : replace abogado = abogado[_n-1] if _n>1
+replace abogado = stritrim(trim(itrim(lower(abogado))))
+replace abogado = subinstr(abogado, "ñ","ni",.)
+replace abogado = subinstr(abogado, "á", "a", .)
+replace abogado = subinstr(abogado, "é", "e", .)
+replace abogado = subinstr(abogado, "í", "i", .)
+replace abogado = subinstr(abogado, "ó", "o", .)
+replace abogado = subinstr(abogado, "ú", "u", .)
+replace abogado = subinstr(abogado, "Á", "a", .)
+replace abogado = subinstr(abogado, "É", "e", .)
+replace abogado = subinstr(abogado, "Í", "i", .)
+replace abogado = subinstr(abogado, "Ó", "o", .)
+replace abogado = subinstr(abogado, "Ú", "u", .)
+replace abogado = subinstr(abogado, "â", "a", .)
+replace abogado = subinstr(abogado, "ê", "e", .)
+replace abogado = subinstr(abogado, "î", "i", .)
+replace abogado = subinstr(abogado, "ô", "o", .)
+replace abogado = subinstr(abogado, "ù", "u", .)
+replace abogado = subinstr(abogado, "Â", "a", .)
+replace abogado = subinstr(abogado, "Ê", "e", .)
+replace abogado = subinstr(abogado, "Î", "i", .)
+replace abogado = subinstr(abogado, "Ô", "o", .)
+replace abogado = subinstr(abogado, "Û", "u", .)	
+	
+	
+*Gen id of lawyer
 tostring numero_abogado, replace
 tostring expediente, replace
 gen folio = numero_abogado + "_" + expediente
 drop numero_abogado expediente
 
+duplicates drop folio calif* total prediccion_a prediccion_b monto, force
+	
 merge 1:1 folio using `temp_id', nogen keep(3)
 save "$directorio\DB\lawyer_scores_p3.dta" , replace
