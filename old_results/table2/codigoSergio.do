@@ -20,7 +20,7 @@ set seed 12345678
 
 ********************************************************************************
 *Judges Opinion
-insheet using "$directorio\Raw\Captura Express Completo.csv", clear
+insheet using "$directorio\Raw\calif\Captura Express Completo.csv", clear
 keep junta exp AÑO totaldictaminador
 destring totaldictaminador, replace force
 rename AÑO anio
@@ -29,7 +29,7 @@ save `temp_dictamen'
 
 *
 
-import delimited "$directorio\Raw\base_abogados.csv", varnames(1) clear 
+import delimited "$directorio\Raw\calif\base_abogados.csv", varnames(1) clear 
 
 
 *Cleaning
@@ -75,8 +75,8 @@ replace nombre_archivo_abogado = "8_" + ///
 		if strpos(nombre_archivo_abogado,"0_")!=0 & ///
 		strpos(nombre,"Miguel Angel")!=0		
 		
-merge 1:1 nombre_archivo_abogado using "$directorio\Raw\relacion_base_calidad.dta", keep(3) nogen
-merge m:1 junta expediente ao using "$directorio\Raw\checklist_500L.dta", keep(3) nogen
+merge 1:1 nombre_archivo_abogado using "$directorio\Raw\calif\relacion_base_calidad.dta", keep(3) nogen
+merge m:1 junta expediente ao using "$directorio\Raw\iniciales_dem\checklist_500.dta", keep(3) nogen
 
 rename expediente exp
 rename ao anio

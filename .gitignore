@@ -49,3 +49,10 @@ vignettes/*.pdf
 # ipynb
 /.ipynb_checkpoints/
 /.ipynb_checkpoints/**
+
+# Data files
+/Raw/
+/Raw/**
+
+/DB/
+/DB/**
