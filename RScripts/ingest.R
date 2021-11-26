@@ -22,3 +22,9 @@ drive_download(file = as_id('https://drive.google.com/open?id=1w1FBTXbsEYIeFVp5I
 
 drive_download(file = as_id('https://drive.google.com/open?id=1-pX3OlFkg_j--JrqnMsw12ieqLc6CdZeUJnV0M9a2Sk'),
                path = '../Raw/gf2w', overwrite = T, type = "csv")
+
+
+# Download follow-up end mode (for lawyer quality)
+
+drive_download(file = as_id('https://drive.google.com/open?id=11I7HvZaEzAIFccvzCXqqcQFzua_Ac5LxfJB2-A_At_c'),
+               path = '../Raw/seguimiento_dem.xlsx', overwrite = T)
