@@ -1,0 +1,121 @@
+%\documentclass[AER, draftmode]{AEA}
+ \documentclass[oneside,12pt]{article}
+\input{preamble.tex}
+\onehalfspacing
+
+%%% HELPER CODE FOR DEALING WITH EXTERNAL REFERENCES
+\usepackage{xr}
+\makeatletter
+\newcommand*{\addFileDependency}[1]{
+  \typeout{(#1)}
+  \@addtofilelist{#1}
+  \IfFileExists{#1}{}{\typeout{No file #1.}}
+}
+\makeatother
+
+
+\newcommand*{\myexternaldocument}[1]{
+    \externaldocument{#1}
+    \addFileDependency{#1.tex}
+    \addFileDependency{#1.aux}
+}
+
+%\myexternaldocument{OA}
+%----------------------------------------------------------------
+
+\begin{document}
+
+
+\begin{table}[!ht]
+    \caption{Variables to predict quality}
+    \label{tab:SS}
+    \center
+    \scriptsize{\input{./Tables/vars_calidad.tex}}
+
+    %\textit{Do file: } \texttt{SS_draft}
+  
+\end{table}
+
+
+\begin{table}[!ht]
+    \caption{OOS measures prediction ratings}
+    \label{tab:SS}
+    \center
+    \scriptsize{\input{./Tables/oos_mods.tex}}
+
+    %\textit{Do file: } \texttt{SS_draft}
+  
+\end{table}
+
+
+
+\begin{table}[!ht]
+    \caption{Variable Importance}
+    \label{tab:SS}
+    \center
+    \scriptsize{\input{./Tables/var_imp.tex}}
+
+    %\textit{Do file: } \texttt{SS_draft}
+  
+\end{table}
+
+
+\begin{table}[!ht]
+    \caption{Ratings vs Outomes}
+    \label{tab:SS}
+    \center
+    \scriptsize{\input{./Tables/outcome_quality.tex}}
+
+    %\textit{Do file: } \texttt{SS_draft}
+  
+\end{table}
+
+
+
+\begin{table}[!ht]
+    \caption{Quality TE}
+    \label{tab:SS}
+    \center
+    \scriptsize{\input{./Tables/te_outcome_ofirec.tex}}
+
+    %\textit{Do file: } \texttt{SS_draft}
+  
+\end{table}
+
+
+
+\begin{table}[!ht]
+    \caption{Case value (unconditional)}
+    \label{tab:SS}
+    \center
+    \scriptsize{\input{./Tables/oosX.tex}}
+
+    %\textit{Do file: } \texttt{SS_draft}
+  
+\end{table}
+
+
+\begin{table}[!ht]
+    \caption{Case value (conditional on filing)}
+    \label{tab:SS}
+    \center
+    \scriptsize{\input{./Tables/oosZ.tex}}
+
+    %\textit{Do file: } \texttt{SS_draft}
+  
+\end{table}
+
+
+\begin{table}[!ht]
+    \caption{Case value by treatment}
+    \label{tab:SS}
+    \center
+    \scriptsize{\input{./Tables/case_Value.tex}}
+
+    %\textit{Do file: } \texttt{SS_draft}
+  
+\end{table}
+
+
+\end{document}
+

@@ -101,6 +101,10 @@ foreach var of varlist npv c_indem c_prima_antig c_rec20 c_ag c_vac ///
 *Lawyers name cleaning
 do "$directorio\DoFiles\cleaning\name_cleaning_hd.do"
 
+foreach var of varlist nombre_ac nombre_d1 nombre_d2 nombre_d3 nombre_d4 nombre_d5 nombre_d6 {
+	replace `var' = ustrlower(ustrregexra(ustrnormalize(stritrim(trim(itrim(`var'))), "nfd"), "\p{Mark}", "")) 
+}
+
 
 ********************************DATASET LAWYER**********************************
 
@@ -126,6 +130,8 @@ keep /*Lawyers information*/ ///
 	fechadem fechater ///
 	/*Other*/ ///
 	giro_empresa ///
+	/*Names*/ ///
+	nombre_ac nombre_d1 nombre_d2 nombre_d3 nombre_d4 nombre_d5 nombre_d6 ///
 	/*Id*/ ///
 	junta exp anio
 	
@@ -147,6 +153,8 @@ order  /*Lawyers information*/ ///
 	fechadem fechater ///
 	/*Other*/ ///
 	giro_empresa ///
+	/*Names*/ ///
+	nombre_ac nombre_d1 nombre_d2 nombre_d3 nombre_d4 nombre_d5 nombre_d6 ///
 	/*Id*/ ///
 	junta exp anio
 

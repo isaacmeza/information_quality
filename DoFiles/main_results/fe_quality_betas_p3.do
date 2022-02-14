@@ -4,12 +4,12 @@ Author :  Isaac Meza
 */
 
 ********************************************************************************
-global input_varlist wage rel_procu rel_ent dw_scian dw_giro_procu indem sal_caidos prima_antig ///
+global input_varlist_p3 indem sal_caidos prima_antig ///
 	prima_vac hextra prima_dom desc_sem desc_ob sarimssinf utilidades nulidad ///
 	codem reinst
 
 
-global bvc gen horas_sem  salario_diario abogado_pub  c_antiguedad 	
+global bvc_p3 gen horas_sem  salario_diario abogado_pub  c_antiguedad 	
 
 
 // GRAPH FORMATTING
@@ -37,22 +37,9 @@ local rcap_options_95 lcolor(black) lwidth(thin)
 ********************************************************************************
 
 
-use "$directorio\DB\quality_lawyer_dataset.dta", clear
+use "$directorio\DB\iniciales_dem_p3.dta" , clear
+merge m:m junta exp anio using "$directorio\DB\lawyer_scores_p3.dta", nogen 
 
-*Generation of variables of interest
-do "$directorio\DoFiles\cleaning\gen_measures.do"
-
-
-*Variable name cleaning
-foreach var of varlist perc* {
-	local nvar = substr("`var'",6,.)
-	cap rename `var' `nvar'
-	}
-
-foreach var of varlist ratio* {
-	local nvar = substr("`var'",7,.)
-	cap rename `var' `nvar'
-	}
 
 bysort gp_office : gen num_casefiles = _N
 drop if num_casefiles<=4
@@ -68,27 +55,14 @@ if `r(sd)' == 0 {
 }
 	
 	
-*Drop outliers
-xtile perc = win_minley, nq(1000) 
-replace win_minley = . if perc==1000 | perc==1
+foreach varj of varlist  total calif_rubro_proemio calif_prestaciones calif_hechos calif_derechos calif_puntos_petitorios prediccion_a prediccion_b monto {
 
-*PCA
-pca liq_total pos_rec duration win_minley settlement
-predict pc1, score
-hist pc1, percent kdensity scheme(s2mono) graphregion(color(white))
-graph export "$directorio\Figuras\hist_pca.pdf", replace
-	
-*we standardize it in such a way that a higher score means a higher quality lawyer
-replace duration = -duration
-	
-foreach varj of varlist pc1 liq_total pos_rec duration win_minley settlement {
-	
 	*Standardization
 	su `varj'
 	gen std_`varj' = (`varj'-`r(mean)')/`r(sd)'
 	
 	*wrt procu
-	reg std_`varj' $input_varlist $bvc ib`procu'.id, r cluster(id)
+	reg std_`varj' $input_varlist_p3 $bvc_p3 ib`procu'.id, r cluster(id)
 	
 	local df = e(df_r)
 	levelsof id if e(sample), local(levels) 
@@ -101,7 +75,7 @@ foreach varj of varlist pc1 liq_total pos_rec duration win_minley settlement {
 		*Omited office
 		if `row'!=`procu' { 
 		// Beta 
-		matrix results[`row',2] = _b[`row'.id] 
+		matrix results[`row',2] = (_b[`row'.id] )
 		// Standard error
 		matrix results[`row',3] = _se[`row'.id]
 		// P-value
@@ -152,7 +126,7 @@ foreach varj of varlist pc1 liq_total pos_rec duration win_minley settlement {
 	;
 	
 	#delimit cr
-	graph export "$directorio\Figuras\betas_ql_`varj'.pdf", replace
+	graph export "$directorio\Figuras\betasp3_ql_`varj'.pdf", replace
 	
 	
 	*Save estimation
@@ -171,20 +145,21 @@ foreach varj of varlist pc1 liq_total pos_rec duration win_minley settlement {
 	}
 	
 pwcorr beta*, star(.05) sig
-putexcel set "$directorio\Tables\betas_cor.xlsx", sheet("betas_cor") modify
+putexcel set "$directorio\Tables\betas_cor.xlsx", sheet("betasp3_cor") modify
 putexcel C4 =  matrix(r(C)), names
-putexcel K4 =  matrix(r(sig)), names
+putexcel N4 =  matrix(r(sig)), names
 
-spearman beta*, star(.05)	
-putexcel set "$directorio\Tables\betas_cor.xlsx", sheet("betas_spearman") modify
-putexcel C4 =  matrix(r(Rho)), names
-putexcel K4 =  matrix(r(P)), names
-	
+spearman beta*, star(.05)
+putexcel set "$directorio\Tables\betas_cor.xlsx", sheet("betasp3_spearman") modify
+putexcel C4 =  matrix(r(Rho)), names	
+putexcel N4 =  matrix(r(P)), names	
 ********************************************************************************
 ********************************************************************************
 ********************************************************************************
 
-merge m:m id_exp nombre_ac using "$directorio\_aux\seguimiento_aud_hd.dta", nogen keep(3)
+
+merge m:m id_exp nombre_ac using "$directorio\_aux\seguimiento_aud_p3.dta", nogen
+merge m:1 junta exp anio using "$directorio\DB\seguimiento_dem_p3.dta", nogen
 duplicates drop
 
 
@@ -208,13 +183,15 @@ keep ///
 junta exp anio id ///
 /*Iniciales*/ ///
 gen horas_sem salario_diario abogado_pub c_antiguedad trabajador_base indem sal_caidos prima_antig prima_vac hextra prima_dom desc_sem desc_ob sarimssinf utilidades nulidad codem reinst ///
-salario_base_diario c_indem c_prima_antig c_rec20 c_ag c_vac c_hextra c_prima_vac c_prima_dom c_desc_sem c_desc_ob c_utilidades c_recsueldo c_total c_sal_caidos min_ley giro_empresa ///
+giro_empresa ///
+/*Quality vars*/ ///
+accion_principal derecho_propio_c_clv giro_defendant_c_clv num_demandados_totales num_demandados_completos num_abogados_proemio num_abogados_proemio_completos incrementos_sal_c_clv contrato_c_clv lugar_trabajo_c_clv horario_inicio_jornada_c_clv horario_fin_jornada_c_clv especifican_dias_c_clv salario_int_clv periodo_sal_int_clv fecha_despido_c_clv lugar_despido_c_clv motivo_despido_c_clv cargo_despide_clv presentado_tiempo_forma_c_clv personalidad_c_clv firma_trabajador_c_clv ///
 /*Seguimiento Aud*/ ///
 tipo_persona_demandado dummy_correccion_domicilio dummy_ampliacion_modif dummy_exhorto contador_notificacion_actor comparecencia_cde_actor contador_cde comparecencia_oap_actor contador_oap comparecencia_dp_actor contador_dp alegatos_actor  ///
 /*Pruebas*/ ///
 confes_ofr_actor testi_ofr_actor docum_ofr_actor inspec_ofr_actor peric_ofr_actor confes_adm_actor testi_adm_actor docum_adm_actor inspec_adm_actor peric_adm_actor confes_desahg_actor testi_desahog_actor docum_desahog_actor inspec_desahog_actor peric_desahog_actor confes_desahog_desist_actor testi_desahog_desist_actor docum_objecion_actor dummy_inspec_compar_actor dummy_inspec_mostro_actor  ///
 /*Outcome*/ 	///
-modo_termino npv liq_total pos_rec duration win_minley settlement  ///
+total calif* monto ///
 /*Office score*/  ///
 beta_* se_*
 
@@ -223,15 +200,17 @@ order  ///
 junta exp anio id ///
 /*Iniciales*/ ///
 gen horas_sem salario_diario abogado_pub c_antiguedad trabajador_base indem sal_caidos prima_antig prima_vac hextra prima_dom desc_sem desc_ob sarimssinf utilidades nulidad codem reinst ///
-salario_base_diario c_indem c_prima_antig c_rec20 c_ag c_vac c_hextra c_prima_vac c_prima_dom c_desc_sem c_desc_ob c_utilidades c_recsueldo c_total c_sal_caidos min_ley giro_empresa ///
+giro_empresa ///
+/*Quality vars*/ ///
+accion_principal derecho_propio_c_clv giro_defendant_c_clv num_demandados_totales num_demandados_completos num_abogados_proemio num_abogados_proemio_completos incrementos_sal_c_clv contrato_c_clv lugar_trabajo_c_clv horario_inicio_jornada_c_clv horario_fin_jornada_c_clv especifican_dias_c_clv salario_int_clv periodo_sal_int_clv fecha_despido_c_clv lugar_despido_c_clv motivo_despido_c_clv cargo_despide_clv presentado_tiempo_forma_c_clv personalidad_c_clv firma_trabajador_c_clv ///
 /*Seguimiento Aud*/ ///
 tipo_persona_demandado dummy_correccion_domicilio dummy_ampliacion_modif dummy_exhorto contador_notificacion_actor comparecencia_cde_actor contador_cde comparecencia_oap_actor contador_oap comparecencia_dp_actor contador_dp alegatos_actor  ///
 /*Pruebas*/ ///
 confes_ofr_actor testi_ofr_actor docum_ofr_actor inspec_ofr_actor peric_ofr_actor confes_adm_actor testi_adm_actor docum_adm_actor inspec_adm_actor peric_adm_actor confes_desahg_actor testi_desahog_actor docum_desahog_actor inspec_desahog_actor peric_desahog_actor confes_desahog_desist_actor testi_desahog_desist_actor docum_objecion_actor dummy_inspec_compar_actor dummy_inspec_mostro_actor  ///
 /*Outcome*/ 	///
-modo_termino npv liq_total pos_rec duration win_minley settlement  ///
+total calif* monto ///
 /*Office score*/  ///
 beta_* se_*
 
 
-export delimited using "$directorio\_aux\betas_score_hd.csv", replace quote nolabel 
+export delimited using "$directorio\_aux\betas_score_p3.csv", replace quote nolabel 

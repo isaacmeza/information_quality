@@ -90,7 +90,8 @@ replace abogado = subinstr(abogado, "Î", "i", .)
 replace abogado = subinstr(abogado, "Ô", "o", .)
 replace abogado = subinstr(abogado, "Û", "u", .)	
 	
-	
+replace abogado = "zlaura alicia aquino arriaga" if strpos(abogado, "laura")!=0	
+
 *Gen id of lawyer
 tostring numero_abogado, replace
 tostring expediente, replace

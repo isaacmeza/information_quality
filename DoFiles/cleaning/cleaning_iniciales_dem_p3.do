@@ -169,18 +169,41 @@ replace anio = 2018 if inlist(anio, 2918,3018)
 drop if missing(junta)
 duplicates drop 
 
+
 *Recover missing values in duplicated observations
 foreach var of varlist prevencion numero_actores_totales genero anio_nacimiento codigo_postal* numero_demandados_totales tipo_demandado_* codemanda_sar_imss_info tipo_abogado reclutamiento giro_empresa trabajador_confianza causa sueldo_base periodicidad_sueldo_base sueldo_estadistico periodicidad_sueldo_estadistic tipo_jornada numero_horas_laboradas periodicidad_horas_laboradas reinstalacion indemnizacion_constitucional indemnizacion_monto salarios_caidos salarios_caidos_monto prima_antiguedad prima_antiguedad_monto vacaciones razon_dias_periodo_vacacional dias_totales_vacaciones vacaciones_monto prima_vacacional prima_vacacional_porcentaje prima_vacacional_monto aguinaldo razon_dias_anio_aguinaldo dias_totales_aguinaldo aguinaldo_monto horas_extra horas_extra_semana horas_extra_monto total_horas_extra_ indemnizacion_20_dias_anio_ser diasmonto prima_dominical prima_dominical_monto descanso_semanal descanso_semanal_monto descanso_obligatorio descanso_obligatorio_monto cuotas_sar_imss_info utilidades utilidades_monto salarios_devengados_numero_dia otras_prestaciones_monto nulidad trabajo_proyecto accion_principal tipo_prevencion fecha* {
-	sort junta exp anio nombre_actor `var'
-	by junta exp anio nombre_actor : replace `var' = `var'[_n-1] if missing(`var')
+	sort junta exp anio nombre_ac `var'
+	by junta exp anio nombre_ac : replace `var' = `var'[_n-1] if missing(`var')
 }
 
-duplicates drop junta exp anio nombre_actor, force
-order junta exp anio nombre_actor
+duplicates drop junta exp anio nombre_ac, force
+order junta exp anio nombre_ac
 
 *Merge with previous datasets
 merge m:1 junta exp anio using `temp_exp', nogen keep(1 3)
 merge m:m junta exp anio using `temp_idactor', nogen keep(1 3)
 
+*Generation of variables of interest
+*Public Lawyer
+gen abogado_pub = (tipo_abogado==3) if !missing(tipo_abogado)
+gen c_antiguedad = (fecha_salida - fecha_entrada)/365
+replace c_antiguedad = . if c_antiguedad<0
+
+*Homologation of variables with HD
+rename (genero numero_horas_laboradas sueldo_estadistico  trabajador_confianza indemnizacion_constitucional salarios_caidos prima_antiguedad prima_vacacional horas_extra prima_dominical descanso_semanal descanso_obligatorio cuotas_sar_imss_info  codemanda_sar_imss_info reinstalacion ) ///
+	(gen horas_sem salario_diario   trabajador_base indem sal_caidos prima_antig prima_vac hextra prima_dom desc_sem desc_ob sarimssinf   codem reinst )
+	
+*Cleaning	
+replace horario_inicio_jornada_c_clv = 1 if horario_inicio_jornada_c_clv==11	
+********************************************************************************
+* Name cleaning
+do "$directorio\DoFiles\cleaning\name_cleaning_p3.do"
+
+
+foreach var of varlist nombre_ac nombre_demandado* {
+	replace `var' = ustrlower(ustrregexra(ustrnormalize(stritrim(trim(itrim(`var'))), "nfd"), "\p{Mark}", "")) 
+}
+rename nombre_actor nombre_ac
+
 *Save dataset
-save "$directorio\DB\iniciales_dem_p3.dta" , replace
+save "$directorio\_aux\iniciales_dem_p3.dta" , replace

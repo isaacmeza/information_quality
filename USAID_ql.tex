@@ -1,0 +1,491 @@
+%\documentclass[AER, draftmode]{AEA}
+ \documentclass[oneside,11pt]{article}
+\input{preamble.tex}
+\onehalfspacing
+
+%%% HELPER CODE FOR DEALING WITH EXTERNAL REFERENCES
+\usepackage{xr}
+\makeatletter
+\newcommand*{\addFileDependency}[1]{
+  \typeout{(#1)}
+  \@addtofilelist{#1}
+  \IfFileExists{#1}{}{\typeout{No file #1.}}
+}
+\makeatother
+
+
+\newcommand*{\myexternaldocument}[1]{
+    \externaldocument{#1}
+    \addFileDependency{#1.tex}
+    \addFileDependency{#1.aux}
+}
+
+%\myexternaldocument{OA}
+%----------------------------------------------------------------
+
+\begin{document}
+
+\begin{titlepage}
+\title{Lawyer Quality}
+\author{Joyce Sadka\thanks{Instituto Tecnológico Autónomo de México} \and Enrique Seira\thanks{Instituto Tecnológico Autónomo de México} \and Christopher Woodruff\thanks{University of Oxford}}
+\date{\today}
+\maketitle
+\begin{abstract}
+\noindent 
+
+\bigskip
+\end{abstract}
+\setcounter{page}{0}
+\thispagestyle{empty}
+\end{titlepage}
+\pagebreak \newpage
+
+\subsection{Context} 
+The poor in developing countries have little access to justice. Courts are ineffective and corrupt, and the market for legal services is inefficient and plagued by poor quality representation. Mexican labor courts are emblematic of these issues. Using firing and lawsuit data, we estimate that fewer than 5\% of Mexico’s dismissed workers even attempt to seek justice through the courts. Among those who do, most recover a small share of what they are owed and more than one-third recover nothing at all. \\
+
+-Insufficient information: Workers are misinformed and excessively optimistic. Only one-third of workers understand their legal entitlements; workers on average believe their probability of winning is 89\%, though only 24\% receive compensation after a judge’s decision. Many workers use low quality, informal lawyers found at the courthouse entrance –commonly called “Coyotes” – instead of acquiring quality legal representation (Sadka et al. 2019). \\
+
+-Lawyers exploit asymmetric information: Lawyers are well compensated for filing a suit, so low-quality lawyers convince workers to sue even if they are unlikely to win and would be better off settling (Sadka et al. 2020). On average, workers recover half of the legal entitlement, and only 20\% of their claim. \\
+
+There is no database workers can consult for lawyers and their outcomes, so plaintiff’s lawyers have weak incentives to acquire reputation. And finally, ignorance and overconfidence may make workers easy prey to lawyers. 
+
+\section{Measuring quality}
+
+
+We face the significant challenge of measuring the quality of the lawyers. We document quality using distinct information about the casefile. One option is to wait until the cases are all completed and measure the effects on outcomes - we will call this \textbf{objective measures of quality}. There are at least two concerns with measuring quality in this manner. First, higher quality lawyers may handle more difficult cases (Dranove et al, 2003). Second, cases proceeding to judgment may take four years or longer to be completed (Sadka et al., 2019); hence we would need to wait a very long time to measure outcomes.  
+
+
+The other option, which we refer to as \textbf{subjective measure of quality}, is to assess the quality of the initial case filings\footnote{Measuring the quality in initial case files is a good first approach to measure both case file and lawyer quality because it is a crucial document that determines the principal action in the case, as well as the alleged facts. It is also fairly short, and available at the very beginning of the lawsuit, which allows us to rate both historical casefiles and ongoing casefiles with the same methodology.}, which we view as being determined by the quality of the lawyer and the ability of the plaintiff to monitor the lawyer. Our measure of the quality of the initial case filing is grounded in an incentivized, blind rating of case files by eight lawyers with experience litigating in labor court.
+
+
+\section{Data}
+
+We have several sources of data. Given the duration of the average lawsuit, in order to create the objective measure of quality we focus on cases filed in 2011, the earliest year for which the court had digital records of all initial case filings. We have data on ~5000 cases. Our second source of data are a subsample of cases filed in all 20 subcourts from May 15, 2017 through 2019\footnote{xxx\% of this cases are still ongoing.} This are the lawsuits rated by experts, and from which we construct the subjective measure of quality.
+
+
+\section{Objective measures of quality}
+
+Figure \ref{heterogeneity} documents heterogeneity in objective measures of quality. For the different outcomes, we estimate the following specification
+
+\[ \widetilde{y}_i = \alpha X + \sum_j\beta_j\mathds{1}(\text{Lawyer} = j) + \epsilon_j\]
+
+where $\widetilde{y}_i$ is the $z$-score of an objective outcome for casefile $i$, $X$ are casefile controls, and $\beta_j$ is the fixed-effect of lawyer $j$, and we cluster at the lawyer level. The different point estimates $\beta_j$ can be mapped to a score, and we standardize it in such a way that a higher score means a higher quality lawyer. 
+
+
+\begin{figure}[H] 
+    \label{heterogeneity}
+    \caption{Lawyer quality heterogeneity (objective)}
+     \begin{center}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Amount won}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betas_ql_liq_total.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Recovered a positive amount}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betas_ql_pos_rec.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Duration}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betas_ql_pos_rec.pdf}
+    \end{subfigure}    
+ \begin{subfigure}{0.49\textwidth}
+        \caption{Amount won as percentage of legal entitlement}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betas_ql_win_minley.pdf}
+    \end{subfigure}    
+ \begin{subfigure}{0.49\textwidth}
+        \caption{Settlement}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betas_ql_settlement.pdf}
+    \end{subfigure}        
+    \end{center}
+    \scriptsize{ \noindent 
+    \textit{Do file: }  \texttt{fe\_quality\_betas.do}}
+
+\end{figure}
+
+When dealing with several measures of a latent variable, it is sometimes useful to reduce dimensionality with principal component analysis (PCA), which we do. The following figure is a histogram for the first principal component of the 5 objective measures above.
+
+
+
+
+\begin{figure}[H] 
+    \label{pca_hist}
+    \caption{Histogram of PCA}
+     \begin{center}
+      \begin{subfigure}{0.75\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/hist_pca.pdf}
+    \end{subfigure}
+    \end{center}
+    \scriptsize{ \noindent 
+    \textit{Do file: }  \texttt{fe\_quality\_betas.do}}
+
+\end{figure}
+
+
+The next table shows the correlation between the distinct measures of objective quality.
+
+
+\begin{table}[H]
+    \caption{Correlation objective measures}
+    \label{betas_cor}
+     \begin{center}
+    \scriptsize{\input{./Tables/betas_cor.tex}}
+    \end{center}
+  \scriptsize{ \noindent 
+    \textit{Do file: }  \texttt{fe\_quality\_betas.do}}
+\end{table}
+
+
+
+
+\section{Subjective measures of quality}
+
+ 
+
+
+
+
+% Instead, we pursue an alternative approach, based on rating the quality of the initial case filing itself. Discussions with lawyers indicated that case filing varied in quality, with issues related to specificity of the information and claims being the most important. For example, is the address of and other contact information for the defendant complete and detailed? Defendants must be served notice of the suit and hearings, and incomplete information is the most common obstacle to timely notification. Are the circumstances of the dismissal complete, including the names and positions of the individuals who carried out the dismissal? These facts about the dismissal are often the main focus of the evidentiary phase of the lawsuit; greater specificity and clarity are key to lawsuit quality. 
+
+% 
+
+
+
+
+% With these issues in mind, we measure the quality of the case filing in four steps. First, we selected a sample of 500 of the 5000 cases filed in 2011 and hired eight licensed lawyers to rate the quality of the initial filing for those cases. Second, we hired two lawyers as consultants. We asked those two lawyers to examine 100 case files and to suggest hard measures that we could objectively code that might be used to judge the quality of the case filing. Third, we code a subset of those 100 objective measures for all of the 500 case files rated by the eight lawyers.
+
+
+% The lawyers rated each of five main parts of the case filing: the introduction; the list of claims; the facts; the legal arguments; and the closing petitions to the court. They also provided a global rating of the quality of the case filing. They were instructed to rate the case filing itself rather than the quality of the underlying case. The instructions clearly mentioned coherence, completeness, specificity, and well posed claims and arguments as the correct basis for the evaluation, rather than the value of the case or the legal merits of the case
+
+
+\begin{figure}[H] 
+    \label{}
+    \caption{Distribution of ratings}
+     \begin{center}
+      \begin{subfigure}{0.49\textwidth}
+        \caption{Total Score}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/hist_total.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of Rubro \& Proemio}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/hist_calif_rubro_proemio.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of benefits}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/hist_calif_prestaciones.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of acts}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/hist_calif_hechos.pdf}
+    \end{subfigure}    
+ \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of rights}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/hist_calif_derechos.pdf}
+    \end{subfigure}    
+ \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of petition points}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/hist_calif_puntos_petitorios.pdf}
+    \end{subfigure}      
+    \end{center}
+    \scriptsize{ \noindent 
+    \textit{Do file: }  \texttt{laywer\_scores\_p3.do}}
+
+\end{figure}
+
+
+The next table shows simple correlations among the scores.
+
+
+\begin{table}[H]
+    \caption{Correlation subjective measures}
+    \label{scores_cor}
+     \begin{center}
+    \scriptsize{\input{./Tables/scores_cor.tex}}
+    \end{center}
+  \scriptsize{ \noindent 
+    \textit{Do file: }  \texttt{lawyers\_scores\_p3\_f.do}}
+\end{table}
+
+
+
+\begin{figure}[H] 
+    \label{}
+    \caption{Lawyer quality heterogeneity (subjective)}
+     \begin{center}
+      \begin{subfigure}{0.49\textwidth}
+        \caption{Total Score}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betasp3_ql_total.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of Rubro \& Proemio}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betasp3_ql_calif_rubro_proemio.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of benefits}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betasp3_ql_calif_prestaciones.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of acts}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betasp3_ql_calif_hechos.pdf}
+    \end{subfigure}    
+ \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of rights}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betasp3_ql_calif_derechos.pdf}
+    \end{subfigure}    
+ \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of petition points}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/betasp3_ql_calif_puntos_petitorios.pdf}
+    \end{subfigure}      
+    \end{center}
+    \scriptsize{ \noindent 
+    \textit{Do file: }  \texttt{fe\_quality\_betas.do}}
+
+\end{figure}
+
+
+
+
+\subsection{Inter-rater reliability}
+
+
+\begin{figure}[H] 
+    \label{}
+    \caption{Lawyer fixed effects, controlling for variables of the case}
+     \begin{center}
+      \begin{subfigure}{0.49\textwidth}
+        \caption{Total Score}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/boxplot_total.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of Rubro \& Proemio}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/boxplot_calif_rubro_proemio.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of benefits}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/boxplot_calif_prestaciones.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of acts}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/boxplot_calif_hechos.pdf}
+    \end{subfigure}    
+ \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of rights}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/boxplot_calif_derechos.pdf}
+    \end{subfigure}    
+ \begin{subfigure}{0.49\textwidth}
+        \caption{Chapter of petition points}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/boxplot_calif_puntos_petitorios.pdf}
+    \end{subfigure}      
+    \end{center}
+    \scriptsize{ \noindent 
+    \textit{Do file: }  \texttt{laywer\_scores\_p3\_f.do}}
+
+\end{figure}
+
+
+\begin{table}[H]
+    \caption{Correlation between raters}
+    \label{cor_reshape_subj}
+    \begin{center}
+    \scriptsize{\input{./Tables/total_cor_reshape.tex}}
+    \end{center}
+  \scriptsize{ \noindent 
+    \textit{Do file: }  \texttt{laywer\_scores\_p3\_f.do}}
+\end{table}
+
+
+\begin{figure}[H] 
+    \label{bland_altman}
+    \caption{Bland-Altman plots}
+     \begin{center}
+      \begin{subfigure}{0.5\textwidth}
+        \caption{Total Score (1 vs 2)}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/bland_altman_total_12.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.5\textwidth}
+        \caption{Total Score (1 vs 3)}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/bland_altman_total_13.pdf}
+    \end{subfigure}
+    \begin{subfigure}{0.5\textwidth}
+        \caption{Total Score (2 vs 3)}
+        \centering
+        \includegraphics[width=\textwidth]{Figuras/bland_altman_total_23.pdf}
+    \end{subfigure}
+    
+    \end{center}
+    \scriptsize{ \noindent 
+    \textit{Do file: }  \texttt{laywer\_scores\_p3\_f.do}}
+
+\end{figure}
+
+
+\subsection{ICC}
+
+Bland and Altman make the point that any two methods that are designed to measure the same parameter (or property) should have good correlation when a set of samples are chosen such that the property to be determined varies considerably. A high correlation for any two methods designed to measure the same property could thus in itself just be a sign that one has chosen a widespread sample. A high correlation does not necessarily imply that there is good agreement between the two methods.
+
+
+\begin{table}[H]
+    \caption{ICC between raters}
+    \label{icc_cor}
+    \begin{center}
+    \scriptsize{\input{./Tables/total_cor.tex}}
+    \end{center}
+  \scriptsize{ \noindent 
+    \textit{Do file: }  \texttt{laywer\_scores\_p3\_f.do}}
+\end{table}
+
+
+
+
+\section{Determinants of measures of quality}
+
+We tried to predict the ratings (continuous variable 1-10)  with casefile variables, but we fail to do so even with non-linear ML models. If instead we tried to predict a binary variable "above median", results are similar - we achieve an accuracy of 0.58). This suggest there is something on the initial lawsuit that is not captured by the coded variables. For instance, something about the wording, how a lawyer asks for benefits, etc. The next table shows out-of-sample statistics. In-sample we get a R-squared of 0.2 for the Boosting models.
+
+
+
+\begin{figure}[H]%-------------------------------------------
+ \centering
+ \caption{OOS measures of fit using initial casefile variables}
+ \includegraphics[width=\textwidth]{Figuras/oos_X_HD.png}
+ \label{fig:3}
+\end{figure}
+
+\begin{figure}[H]%-------------------------------------------
+ \centering
+ \caption{OOS measures of fit using hearing variables}
+ \includegraphics[width=\textwidth]{Figuras/oos_Z_HD.png}
+ \label{fig:3}
+\end{figure}
+
+
+\begin{figure}[H]%-------------------------------------------
+ \centering
+ \caption{OOS measures of fit using all variables}
+ \includegraphics[width=\textwidth]{Figuras/oos_W_HD.png}
+ \label{fig:3}
+\end{figure}
+
+
+
+
+
+For the subjective measure of quality, this are the results
+
+\begin{figure}[H]%-------------------------------------------
+ \centering
+ \caption{OOS measures of fit using initial casefile variables}
+ \includegraphics[width=\textwidth]{Figuras/oos_X_p3.png}
+ \label{fig:3}
+\end{figure}
+
+\begin{figure}[H]%-------------------------------------------
+ \centering
+ \caption{OOS measures of fit using hearing variables}
+ \includegraphics[width=\textwidth]{Figuras/oos_Z_p3.png}
+ \label{fig:3}
+\end{figure}
+
+
+\begin{figure}[H]%-------------------------------------------
+ \centering
+ \caption{OOS measures of fit using all variables}
+ \includegraphics[width=\textwidth]{Figuras/oos_W_p3.png}
+ \label{fig:3}
+\end{figure}
+
+Here are the most "important" variables in terms of predictive power according to the Gradient Boosting
+
+\begin{figure}[H]%-------------------------------------------
+ \centering
+ \caption{Variable importance}
+ \includegraphics[width=0.5\textwidth]{Figuras/importance.png}
+ \label{fig:3}
+\end{figure}
+
+\section{Latent model}
+
+\section{Objective measures vs Subjective measures}
+
+
+There is difficulty in contrasting both measures of quality, since in principle we are dealing with distinct datasets. To overcome this, we aim to xxxx...
+
+\begin{figure}[H]%-------------------------------------------
+ \centering
+ \caption{Objective vs subjective}
+ \includegraphics[width=\textwidth]{Figuras/obj_vs_sub.png}
+ \label{fig:3}
+\end{figure}
+
+
+
+
+
+%\singlespacing
+%\setlength\bibsep{0pt}
+\bibliographystyle{aea}
+\bibliography{bibliography.bib}
+
+
+
+\clearpage
+
+\onehalfspacing
+
+
+%-------------------------------------------------------------
+
+
+
+
+\clearpage
+
+
+% \begin{figure}[hp]%-----------------------------------------
+%  \centering
+%  \captionof{table}{Summary Statistics and Balance}
+%  \includegraphics[width=.8\textwidth]{Table2.png}
+%  \caption*{Notes: The table shows goodness-of-fit statistics: correlation of predicted vs. actual subjective quality; mean square error and out-of-sample R square in a regression of predicted vs. actual subjective quality.}
+%  \label{tab:2}
+% \end{figure}%-----------------------------------------------
+
+
+%\begin{figure}[hp]
+%  \centering
+%  \includegraphics[width=.8\textwidth]{../fig/placeholder.pdf}
+%  \caption{Placeholder}
+%  \label{fig:placeholder}
+%\end{figure}
+
+
+
+
+\clearpage
+
+
+
+\end{document}

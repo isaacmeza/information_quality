@@ -4,6 +4,7 @@
 
 # Session Data files
 .RData
+**/*.db
 
 # Auxiliary files in local tex compilation
 **/*.aux
