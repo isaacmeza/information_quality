@@ -46,8 +46,18 @@ keep dw_scian giro_empresa
 tempfile temp_dwscian
 save `temp_dwscian'
 
+* Add _clv variables to historical data (HD) (5005) 
+use "$directorio\Raw\HD\checklist_clv.dta" , clear
+rename ao anio
+rename expediente exp
+keep junta exp anio *_clv
+tempfile _clv
+save `_clv'
+
 import delimited "$directorio\Raw\HD\scaleup_hd.csv", clear 
+merge m:1 junta exp anio using `_clv', nogen
 duplicates drop junta exp anio id_actor, force
+
 merge m:1 giro_empresa using `temp_dwscian', nogen keep(1 3)
 merge 1:1 junta exp anio id_actor using "$directorio\Raw\HD\calculator.dta", nogen keep(3)
 
