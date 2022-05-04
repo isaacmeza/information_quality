@@ -26,7 +26,7 @@ version 17.0
 use "$directorio\DB\iniciales_dem.dta" , clear
 merge m:1 junta exp anio using  "$directorio\DB\seguimiento_dem.dta", nogen
 keep junta exp anio id_actor modo_termino_ofirec fecha_termino_ofirec cantidad_ofirec  cantidad_inegi cantidad_otorgada convenio_pagado_completo cantidad_pagada sueldo_estadistico periodicidad_sueldo_estadistic 
-merge m:1 id_actor using "$directorio\DB\survey_data_2m.dta", nogen keepusing(id_actor demando_con_abogado_privado demando_con_abogado_publico coyote)
+merge m:1 id_actor using "$directorio\DB\survey_data_2m.dta", nogen keepusing(id_actor demando_con_abogado_privado demando_con_abogado_publico coyote type_lawyer)
 merge m:1 id_actor using "$directorio\DB\treatment_data.dta", keep(2 3) nogen
 merge m:m junta exp anio using "$directorio\DB\lawyer_scores_p3.dta", nogen 
 
@@ -196,6 +196,24 @@ esttab using "$directorio/Tables/reg_results/te_outcome_abogado.csv", se r2 ${st
 	scalars("DepVarMean DepVarMean"  "test_23 T2 = T3") replace 
 
 	
+eststo clear
+eststo : reg total i.type_lawyer  ${controls}, robust
+reg total i.type_lawyer  ${controls} if strpos(abogado,"laura")!=0, robust
+
+gen log_monto = log(monto)
+eststo : reg log_monto i.type_lawyer  ${controls}, robust
+eststo : reg log_monto i.type_lawyer  ${controls} if strpos(abogado,"laura")!=0, robust
+
+
+eststo : reg settlement i.type_lawyer  ${controls}, robust
+eststo : reg cr i.type_lawyer  ${controls}, robust
+eststo : reg duration i.type_lawyer ${controls}, robust
+eststo : reg cantidad_otorgada i.type_lawyer  ${controls}, robust
+gen log_cantidad = log(cantidad_ofirec)
+eststo : reg log_cantidad i.type_lawyer  ${controls}, robust
+eststo : reg convenio_pagado_completo i.type_lawyer  ${controls}, robust
+
+
 	
 foreach var of varlist {
 	

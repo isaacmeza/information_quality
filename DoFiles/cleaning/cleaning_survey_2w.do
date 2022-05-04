@@ -3,7 +3,6 @@ Cleaning Survey Data. The source for this datasets is the follow-up surveys at 2
 Author : Isaac Meza
 */
 
-pause on
 **************************************GFORMS************************************
 insheet using "$directorio\Raw\gf2w.csv", clear
 
@@ -213,9 +212,6 @@ gen survey_date = date(date_timestamp1, "MDY")
 replace survey_date = fecha_ultimo_intento_encuesta if missing(survey_date)
 format survey_date %td
 
-codebook survey_date
-br
-pause
 
 duplicates drop id_actor, force
 merge 1:1 id_actor using "$directorio\DB\treatment_data.dta",  nogen keep(1 3) ///
@@ -296,10 +292,12 @@ foreach var of varlist cond_hablo_con* {
 gen coyote = inlist(como_lo_encontro, 1,2) if !missing(como_lo_encontro)
 replace coyote = 1 if como_lo_encontro==8 & (especifique=="dentro de la junta" | especifique=="afuera de la oficina del módulo") ///
 					& !missing(coyote)
+replace coyote = 0 if missing(coyote) & (!missing(ha_hablado_con_abogado_publico) | !missing(ha_hablado_con_abogado_privado))				
+
 
 *Drop variables
 drop telefono*
 					
 save "$directorio\DB\survey_data_2w.dta", replace	
-pause off
+
 

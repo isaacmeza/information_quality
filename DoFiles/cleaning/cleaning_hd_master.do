@@ -69,7 +69,7 @@ rename nombre_ac1 nombre_ac
 
 save "$directorio\DB\quality_lawyer_dataset.dta", replace
 
-/* To merge with seguimiento de audiencias : */
+/* To merge with seguimiento de audiencias use : */
 /*
 
 merge m:m id_exp nombre_ac using "$directorio\_aux\seguimiento_aud_hd.dta", nogen

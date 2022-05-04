@@ -35,12 +35,12 @@ foreach var in `depvar' {
 
 	*Second stage (IV)
 	eststo: ivregress 2sls `var' `controls' ///
-			 (i.cond_hablo_con_publico = i.group), robust cluster(fecha_alta)	 
+			 (i.cond_hablo_con_publico = i.ab_treatment), robust cluster(fecha_alta)	 
 	estadd local BVC="YES"
 	estadd local Source="2w-2m"
 	
 	*First stage
-	eststo: reg cond_hablo_con_publico i.group `controls' ///
+	eststo: reg cond_hablo_con_publico i.ab_treatment `controls' ///
 		if e(sample), robust cluster(fecha_alta)		 
 	estadd local BVC="YES"
 	estadd local Source="2w-2m"	
@@ -48,7 +48,7 @@ foreach var in `depvar' {
 	*************************************************
 
 	*Probit (FS)
-	eststo: probit cond_hablo_con_publico i.group `controls' if !missing(`var') ///
+	eststo: probit cond_hablo_con_publico i.ab_treatment `controls' if !missing(`var') ///
 		, robust cluster(fecha_alta)
 	estadd local BVC="YES"
 	estadd local Source="2w-2m"
@@ -85,12 +85,12 @@ foreach var in `depvar' {
 
 	*Second stage (IV)
 	eststo: ivregress 2sls `var' `controls' ///
-			 (i.ha_hablado_con_abogado_publico = i.group), robust cluster(fecha_alta)	 
+			 (i.ha_hablado_con_abogado_publico = i.ab_treatment), robust cluster(fecha_alta)	 
 	estadd local BVC="YES"
 	estadd local Source="2w-2m"
 	
 	*First stage
-	eststo: reg ha_hablado_con_abogado_publico i.group `controls' ///
+	eststo: reg ha_hablado_con_abogado_publico i.ab_treatment `controls' ///
 		if e(sample), robust cluster(fecha_alta)		 
 	estadd local BVC="YES"
 	estadd local Source="2w-2m"	
@@ -98,7 +98,7 @@ foreach var in `depvar' {
 	*************************************************
 
 	*Probit (FS)
-	eststo: probit ha_hablado_con_abogado_publico i.group `controls' if !missing(`var') ///
+	eststo: probit ha_hablado_con_abogado_publico i.ab_treatment `controls' if !missing(`var') ///
 		, robust cluster(fecha_alta)
 	estadd local BVC="YES"
 	estadd local Source="2w-2m"
