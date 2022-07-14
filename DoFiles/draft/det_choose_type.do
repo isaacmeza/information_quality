@@ -19,7 +19,7 @@ version 17.0
 
 use "$directorio\DB\iniciales_dem.dta" , clear
 merge m:1 junta exp anio using  "$directorio\DB\seguimiento_dem.dta", nogen
-keep junta exp anio id_actor modo_termino modo_termino_ofirec modo_termino_exp fecha_termino_ofirec cantidad_ofirec cantidad_inegi cantidad_otorgada convenio_pagado_completo cantidad_pagada sueldo_estadistico periodicidad_sueldo_estadistic 
+keep junta exp anio id_actor modo_termino modo_termino_ofirec modo_termino_exp fecha_termino_ofirec cantidad_ofirec cantidad_inegi cantidad_otorgada convenio_pagado_completo cantidad_pagada sueldo_estadistico periodicidad_sueldo_estadistic tipo_abogado
 *Keep unique id_actor
 duplicates drop
 drop if missing(id_actor)
@@ -45,6 +45,10 @@ rename entablo_demanda entablo_demanda_2m
 merge 1:1 id_actor using "$directorio\DB\treatment_data.dta", keep(3) nogen
 
 ********************************************************************************
+
+gen new_ab_treatment = inlist(treatment,2,4) + 1 if inlist(treatment,1,2,3,4) & !missing(treatment)
+
+
 
 gen sueldo_estadistico_diario = sueldo_estadistico if periodicidad_sueldo_estadistic==0
 replace sueldo_estadistico_diario = sueldo_estadistico/30 if periodicidad_sueldo_estadistic==1
@@ -97,6 +101,28 @@ reg type_law_d1 `controls'  if ab_treatment==2
  
  
   reg type_law_d1 i.ab_treatment##mujer i.ab_treatment##c.antiguedad i.ab_treatment##c.salario_diario i.ab_treatment##c.horas_sem, vce(cluster fecha_alta)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ reg ha_hablado_con_abogado_publico i.new_ab, r
+ reg ha_hablado_con_abogado_publico i.ab_treatment, r
+ 
+  
+ 
+   
+ reg type_law_d1 i.new_ab##mujer i.new_ab##c.antiguedad i.new_ab##c.salario_diario , vce(cluster fecha_alta)
+ 
+ 
+  reg ha_hablado_con_abogado_publico i.new_ab##mujer i.new_ab##c.antiguedad i.new_ab##c.salario_diario , vce(cluster fecha_alta)
+ 
+   reg ha_hablado_con_abogado_publico i.ab_treatment##mujer i.ab_treatment##c.antiguedad i.ab_treatment##c.salario_diario , vce(cluster fecha_alta)
+ 
+ 
+ 
  
  
  

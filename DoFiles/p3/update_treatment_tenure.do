@@ -9,7 +9,7 @@ eststo clear
 use "$directorio\DB\treatment_data.dta", clear
 merge 1:1 id_actor using "$directorio\DB\survey_data_2w.dta", keep(1 3)
 
-
+gen high_tenure = (antiguedad<=5)  if antiguedad<2.67 & !missing(antiguedad)
 *****************************      PROBABILITY      ****************************
 
 *Independent dummy variable
@@ -17,19 +17,19 @@ cap drop bajo_inm
 gen bajo_inm=prob_ganar_treat<prob_ganar if  !missing(prob_ganar) & !missing(prob_ganar_treat)
 replace bajo_inm=0 if main_treatment==1 & !missing(prob_ganar)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
-	estadd scalar test_23=`r(p)'
+	 test 2.main_treatment=3.main_treatment
+	estadd scalar test_23=`r(p)'	
 	
 *Independent continuous variable
 cap drop bajo_inm
 gen bajo_inm=prob_ganar_treat-prob_ganar if !missing(prob_ganar) & !missing(prob_ganar_treat)
 replace bajo_inm=0 if main_treatment==1 & !missing(prob_ganar)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'	
 	
 ******************************        AMOUNT        ****************************
@@ -39,9 +39,9 @@ cap drop bajo_inm
 gen bajo_inm=cantidad_ganar_treat<cantidad_ganar if  !missing(cantidad_ganar) & !missing(cantidad_ganar_treat)
 replace bajo_inm=0 if main_treatment==1 & !missing(cantidad_ganar)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'
 	
 *Independent dummy variable
@@ -49,9 +49,9 @@ cap drop bajo_inm
 gen bajo_inm=cantidad_ganar_treat-cantidad_ganar if !missing(cantidad_ganar) & !missing(cantidad_ganar_treat)
 replace bajo_inm=0 if main_treatment==1 & !missing(cantidad_ganar)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)	
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'				
 				
 *								2W - Baseline  		 	  	   			       *
@@ -63,18 +63,18 @@ eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
 cap drop bajo_inm
 gen bajo_inm=prob_ganar_survey<prob_ganar if  !missing(prob_ganar) & !missing(prob_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'
 	
 *Independent continuous variable
 cap drop bajo_inm
 gen bajo_inm=prob_ganar_survey-prob_ganar if !missing(prob_ganar) & !missing(prob_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'
 	
 	
@@ -84,24 +84,25 @@ eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
 cap drop bajo_inm
 gen bajo_inm=cantidad_ganar_survey<cantidad_ganar if  !missing(cantidad_ganar) & !missing(cantidad_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'
 	
 *Independent dummy variable
 cap drop bajo_inm
 gen bajo_inm=cantidad_ganar_survey-cantidad_ganar if !missing(cantidad_ganar) & !missing(cantidad_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)	
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'	
 	
 	
 use "$directorio\DB\treatment_data.dta", clear
 merge 1:1 id_actor using "$directorio\DB\survey_data_2m.dta", keep(3)
 
+gen high_tenure = (antiguedad<=5)  if antiguedad<2.67 & !missing(antiguedad)
 
 *								2M - Baseline  		 	  	   			       *
 ********************************************************************************
@@ -112,18 +113,18 @@ merge 1:1 id_actor using "$directorio\DB\survey_data_2m.dta", keep(3)
 cap drop bajo_inm
 gen bajo_inm=prob_ganar_survey<prob_ganar if  !missing(prob_ganar) & !missing(prob_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'
 	
 *Independent continuous variable
 cap drop bajo_inm
 gen bajo_inm=prob_ganar_survey-prob_ganar if !missing(prob_ganar) & !missing(prob_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'	
 	
 ******************************        AMOUNT        ****************************
@@ -132,18 +133,18 @@ eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
 cap drop bajo_inm
 gen bajo_inm=cantidad_ganar_survey<cantidad_ganar if  !missing(cantidad_ganar) & !missing(cantidad_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'
 	
 *Independent dummy variable
 cap drop bajo_inm
 gen bajo_inm=cantidad_ganar_survey-cantidad_ganar if !missing(cantidad_ganar) & !missing(cantidad_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'
 
 
@@ -160,6 +161,7 @@ rename prob_ganar_survey prob_ganar_survey_2w
 rename cantidad_ganar_survey cantidad_ganar_survey_2w
 merge 1:1 id_actor using "$directorio\DB\survey_data_2m.dta", keepusing(cantidad_ganar_survey prob_ganar_survey) keep(1 3)
 
+gen high_tenure = (antiguedad<=5)  if antiguedad<2.67 & !missing(antiguedad)
 
 *****************************      PROBABILITY      ****************************
 
@@ -167,18 +169,18 @@ merge 1:1 id_actor using "$directorio\DB\survey_data_2m.dta", keepusing(cantidad
 cap drop bajo_inm
 gen bajo_inm=prob_ganar_survey<prob_ganar_survey_2w if  !missing(prob_ganar_survey_2w) & !missing(prob_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'
 	
 *Independent continuous variable
 cap drop bajo_inm
 gen bajo_inm=prob_ganar_survey-prob_ganar_survey_2w if !missing(prob_ganar_survey_2w) & !missing(prob_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'	
 	
 ******************************        AMOUNT        ****************************
@@ -187,23 +189,23 @@ eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
 cap drop bajo_inm
 gen bajo_inm=cantidad_ganar_survey<cantidad_ganar_survey_2w if  !missing(cantidad_ganar_survey_2w) & !missing(cantidad_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'
 	
 *Independent dummy variable
 cap drop bajo_inm
 gen bajo_inm=cantidad_ganar_survey-cantidad_ganar_survey_2w if !missing(cantidad_ganar_survey_2w) & !missing(cantidad_ganar_survey)
 
-eststo: reg bajo_inm i.main_treatment mujer antiguedad salario_diario ///
+eststo: reg bajo_inm i.main_treatment##i.high_tenure mujer  salario_diario ///
 	, robust cluster(fecha_alta)
-	qui test 2.main_treatment=3.main_treatment
+	 test 2.main_treatment=3.main_treatment
 	estadd scalar test_23=`r(p)'
 	
 	
 *************************
-	esttab using "$directorio/Tables/reg_results/update_treatment.csv", se star(* 0.1 ** 0.05 *** 0.01) b(a2) r2 ///
+	esttab using "$directorio/Tables/reg_results/update_treatment_high_tenure.csv", se star(* 0.1 ** 0.05 *** 0.01) b(a2) r2 ///
 	scalars("BVC BVC" "test_23 T2=T3") replace 
 				
 			

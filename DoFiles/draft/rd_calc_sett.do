@@ -7,10 +7,107 @@ replace monto = . if monto<0
 gen corte_dw = salario_diario>211 if !missing(salario_diario)
 gen corte_tenure = antiguedad>2.67 if !missing(antiguedad)
 
+gen quadrant = 1 if corte_dw==1 & corte_tenure==1
+replace quadrant = 2 if corte_dw==1 & corte_tenure==0
+replace quadrant = 3 if corte_dw==0 & corte_tenure==0
+replace quadrant = 4 if corte_dw==0 & corte_tenure==1
 
-rdrobust conflicto_arreglado antiguedad if main_treatment!=1 & !missing(main_treatment)  & inrange(salario_diario,212,1000), c(2.67)
+rdrobust conflicto_arreglado antiguedad if main_treatment!=1 & !missing(main_treatment)  , c(2.67) 
 
-rdplot conflicto_arreglado antiguedad if main_treatment!=1  & !missing(main_treatment) & inrange(salario_diario,212,1000), c(2.67)
+rdrobust conflicto_arreglado antiguedad if main_treatment==2 & !missing(main_treatment)  , c(2.67) 
+rdrobust conflicto_arreglado antiguedad if main_treatment==3 & !missing(main_treatment)  , c(2.67) 
+
+
+rdrobust monto_del_convenio antiguedad if main_treatment!=1 & !missing(main_treatment)  , c(2.67) 
+
+rdrobust monto_del_convenio antiguedad if main_treatment==2 & !missing(main_treatment)  , c(2.67) 
+rdrobust monto_del_convenio antiguedad if main_treatment==3 & !missing(main_treatment)  , c(2.67) 
+
+
+
+
+rdrobust entablo_demanda antiguedad if main_treatment!=1 & !missing(main_treatment)  , c(2.67) 
+
+rdrobust entablo_demanda antiguedad if main_treatment==2 & !missing(main_treatment)  , c(2.67) 
+rdrobust entablo_demanda antiguedad if main_treatment==3 & !missing(main_treatment)  , c(2.67) 
+
+
+rdrobust confirmo_cita antiguedad if main_treatment==3 & !missing(main_treatment)  , c(2.67) 
+
+
+
+
+
+
+rdrobust conflicto_arreglado antiguedad if main_treatment!=1 & !missing(main_treatment)  , c(2.67) covs(salario_diario mujer)
+
+
+
+rdrobust conflicto_arreglado antiguedad if main_treatment!=1 & !missing(main_treatment)  & corte_dw==1, c(2.67)
+
+rdrobust conflicto_arreglado antiguedad if main_treatment!=1 & !missing(main_treatment)  & corte_dw==0, c(2.67)
+
+gen c1 = 2.67 in 1
+*replace c1 = 2.67 in 2
+gen c2 = 211 in 1
+*replace c2 = 400 in 2
+
+
+gen t = (corte_dw==0 & corte_tenure==1) if !missing(corte_dw) & !missing(corte_tenure)
+
+generate double aux1 = abs(2.67 - antiguedad)
+generate double aux2 = abs(211 - salario_diario)
+egen xnorm = rowmin(aux1 aux2)
+replace xnorm = xnorm*(2*t-1)
+
+
+rdms conflicto_arreglado antiguedad salario_diario t if main_treatment!=1 & !missing(main_treatment) & inlist(quadrant, 1,2) , cvar(c1 c2) xnorm(xnorm)
+
+rdms conflicto_arreglado antiguedad salario_diario t if main_treatment!=1 & !missing(main_treatment) & inlist(quadrant, 1,2,3) , cvar(c1 c2) xnorm(xnorm)
+
+rdms conflicto_arreglado antiguedad salario_diario t if main_treatment!=1 & !missing(main_treatment) & inlist(quadrant, 1,3) , cvar(c1 c2) xnorm(xnorm)
+
+rdms conflicto_arreglado antiguedad salario_diario t if main_treatment!=1 & !missing(main_treatment) & inlist(quadrant, 1,4) , cvar(c1 c2) xnorm(xnorm)
+
+
+rdrobust conflicto_arreglado salario_diario if main_treatment!=1 & !missing(main_treatment)  & corte_tenure==1, c(211) 
+
+
+*Otro outcome es la expectation para los de la frontera y dentro de un cuadrante si los que estan alejados se comportan distinto.
+
+
+rdms monto_del_convenio antiguedad salario_diario t if main_treatment!=1 & !missing(main_treatment) & inlist(quadrant, 2,4) , cvar(c1 c2) xnorm(xnorm)
+rdms monto_del_convenio antiguedad salario_diario t if main_treatment==2 & !missing(main_treatment) & inlist(quadrant, 2,4) , cvar(c1 c2) xnorm(xnorm)
+rdms monto_del_convenio antiguedad salario_diario t if main_treatment==3 & !missing(main_treatment) & inlist(quadrant, 2,4) , cvar(c1 c2) xnorm(xnorm)
+
+
+
+rdms conflicto_arreglado antiguedad salario_diario t if main_treatment!=1 & !missing(main_treatment) & inlist(quadrant, 2,4) , cvar(c1 c2) xnorm(xnorm)
+rdms conflicto_arreglado antiguedad salario_diario t if main_treatment==2 & !missing(main_treatment) & inlist(quadrant, 2,4) , cvar(c1 c2) xnorm(xnorm)
+rdms conflicto_arreglado antiguedad salario_diario t if main_treatment==3 & !missing(main_treatment) & inlist(quadrant, 2,4) , cvar(c1 c2) xnorm(xnorm)
+
+
+rdms entablo_demanda antiguedad salario_diario t if main_treatment!=1 & !missing(main_treatment) & inlist(quadrant, 2,4) , cvar(c1 c2) xnorm(xnorm)
+rdms entablo_demanda antiguedad salario_diario t if main_treatment==2 & !missing(main_treatment) & inlist(quadrant, 2,4) , cvar(c1 c2) xnorm(xnorm)
+rdms entablo_demanda antiguedad salario_diario t if main_treatment==3 & !missing(main_treatment) & inlist(quadrant, 2,4) , cvar(c1 c2) xnorm(xnorm)
+
+
+
+
+
+
+
+
+
+
+
+rdrobust conflicto_arreglado antiguedad if main_treatment!=1  & !missing(main_treatment) & inrange(salario_diario,212,1000), c(2.67) 
+rdplot conflicto_arreglado antiguedad if main_treatment!=1  & !missing(main_treatment) & inrange(salario_diario,212,1000), c(2.67) kernel(triangular) h(`e(h_l)' `e(h_r)') p(1)
+rdrobust conflicto_arreglado antiguedad if main_treatment!=1  & !missing(main_treatment) & inrange(salario_diario,212,1000), c(2.67) 
+
+
+rdplot conflicto_arreglado antiguedad if main_treatment!=1 & !missing(main_treatment)  & inrange(salario_diario,0,211), c(2.67)
+
 
 
 
@@ -97,3 +194,11 @@ gen corte_tenure = antiguedad>2.67 if !missing(antiguedad)
 xtile perc_antiguedad = antiguedad, nq(5)
 
 reg conflicto_arreglado i.perc_antiguedad  i.corte_dw##i.corte_tenure if main_treatment!=1 & !missing(main_treatment) , r
+
+
+gen low_tenure = antiguedad<0.89 if antiguedad<=2.67
+
+reg conflicto_arreglado i.low_tenure  i.corte_dw if main_treatment!=1 & !missing(main_treatment) , r
+
+
+

@@ -30,7 +30,7 @@ duplicates tag id_actor, gen(tg)
 drop if tg>0
 
 merge m:1 id_actor using "$directorio\DB\survey_data_2w.dta", keep(2 3) nogen 
-merge m:1 id_actor using "$directorio\DB\survey_data_2m.dta", keep(2 3) nogen 
+merge m:1 id_actor using "$directorio\DB\survey_data_2m.dta", keep(2 3) nogen force 
 merge m:1 id_actor using "$directorio\DB\treatment_data.dta", keep(2 3) nogen
 *******************************************************************************
 
